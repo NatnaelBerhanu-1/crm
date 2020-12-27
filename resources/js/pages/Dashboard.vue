@@ -1,0 +1,170 @@
+<template>
+    <div>
+        <div class="grid grid-cols-8 grid-rows-2 h-60 gap-2">
+            <div class="col-span-3 row-span-2">
+                <p class="text-lg">Monthly Earning</p>
+                <div class="mt-2 bg-white h-52 shadow-sm">
+                    <line-chart class="w-full h-full" color="#FFE0E6"></line-chart>
+                </div>
+            </div>
+            <div class="col-span-3 row-span-2">
+                <p class="text-lg">Monthly Tasks</p>
+                <div class="mt-2 bg-white h-52 shadow-sm">
+                    <line-chart class="w-full h-full" color="#CDEBFF"></line-chart>
+                </div>
+            </div>
+            <div class="col-span-2 row-span-2">
+                <p class="text-lg">Tasks</p>
+                <div class="grid mt-2 grid-rows-2 grid-cols-1 h-52 gap-2">
+                    <div class="w-full bg-white col-span-1 row-span-1 h-full flex flex-row shadow-sm">
+                        <div class="bg-red-500 w-20 flex flex-row justify-center items-center">
+                            <font-awesome-icon icon="list" size="2x" color="white" />
+                        </div>
+                        <div class="bg-white w-auto pt-2 pl-2 shadow-sm">
+                            <p class="text-lg ">In progress</p>
+                            <p class="text-xl font-bold ">20</p>
+                        </div>
+                    </div>
+                    <div class="w-full bg-white col-span-1 row-span-1 h-full flex flex-row">
+                        <div class="bg-green-500 w-20 flex flex-row justify-center items-center">
+                            <font-awesome-icon icon="tasks" size="2x" color="white" />
+                        </div>
+                        <div class="bg-white w-auto pt-2 pl-2 shadow-sm">
+                            <p class="text-lg ">Completed</p>
+                            <p class="text-xl font-bold ">18</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="bg-white p-4  mt-8 shadow-sm">
+            <div class="flex flex-row items-baseline">
+                <p class="text-lg">Upcomming tasks</p>
+                <router-link to="tasks"><span class="text-primary font-semibold pl-2 text-sm">All tasks</span></router-link>
+            </div>
+            <div class="mt-2  bg-white">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-white text-black-54">
+                            <th>Name</th>
+                            <th>Phone number</th>
+                            <th>Event name</th>
+                            <th>Place</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr >
+                            <td>Natnael</td>
+                            <td>0919298886</td>
+                            <td>Photoshot</td>
+                            <td>Studio</td>
+                            <td>12/03/2020</td>
+                        </tr>
+                        <tr >
+                            <td>Natnael</td>
+                            <td>0919298886</td>
+                            <td>Photoshot</td>
+                            <td>Studio</td>
+                            <td>12/03/2020</td>
+                        </tr>
+                        <tr >
+                            <td>Natnael</td>
+                            <td>0919298886</td>
+                            <td>Photoshot</td>
+                            <td>Studio</td>
+                            <td>12/03/2020</td>
+                        </tr>
+                        <tr >
+                            <td>Natnael</td>
+                            <td>0919298886</td>
+                            <td>Photoshot</td>
+                            <td>Studio</td>
+                            <td>12/03/2020</td>
+                        </tr>
+                        <tr >
+                            <td>Natnael</td>
+                            <td>0919298886</td>
+                            <td>Photoshot</td>
+                            <td>Studio</td>
+                            <td>12/03/2020</td>
+                        </tr>
+                        <tr >
+                            <td>Natnael</td>
+                            <td>0919298886</td>
+                            <td>Photoshot</td>
+                            <td>Studio</td>
+                            <td>12/03/2020</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import LineChart from '../components/LineChart.vue';
+export default {
+    components: {LineChart}
+    
+}
+</script>
+<style lang="css">
+    td, th {
+        @apply text-center;
+    }
+
+    table, th, td{
+        @apply text-sm;
+    }
+
+    table {
+        @apply border;
+    }
+
+    tr:nth-child(even){
+        @apply bg-gray-100
+    }
+    tr:first-child {
+        @apply border-b-2;
+    }
+
+    .title {
+        @apply text-lg text-primary;
+    }
+
+    tr{
+        @apply h-12;
+    }
+
+    .btn-primary{
+        @apply text-sm bg-primary text-white px-3 py-2 mt-2 rounded;
+    }
+
+    input, select {
+        @apply border border-gray-300 rounded-sm w-96 p-1 my-1 px-3 font-normal text-sm;
+    }
+
+    .form-control {
+        @apply mt-2;
+    }
+
+    .form-control label {
+        @apply font-medium;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        @apply border-primary;
+    }
+    
+    label {
+        @apply text-sm;
+    }
+
+    .page-container{
+        @apply bg-white w-full p-4 shadow-sm;
+    }
+
+</style>

@@ -1,0 +1,67 @@
+<template>
+    <div class="text-white py-4">
+        <h1 class="font-bold text-3xl px-6">CRM</h1>
+        <ul class="p-0 mt-6">
+            <li>
+                <router-link to="/dashboard">
+                    <SideBarItem v-bind:icon="['fas', 'tachometer-alt']" title="Dashboard" :active="currentRoute=='/dashboard'"></SideBarItem>
+                </router-link>
+            </li>
+            <li>
+                <router-link to="/staff">
+                    <SideBarItem v-bind:icon="['fas', 'id-card']" title="Staff" :active="currentRoute=='/staff'"></SideBarItem>
+                </router-link>
+            </li>
+            <li>
+                <router-link to="/tasks">
+                    <SideBarItem v-bind:icon="['fas', 'tasks']" title="Tasks" :active="currentRoute=='/tasks'"></SideBarItem>
+                </router-link>
+            </li>
+            <li>
+                <router-link to="/warehouse">
+                    <SideBarItem v-bind:icon="['fas', 'camera']" title="Warehouse" :active="currentRoute=='/warehouse'"></SideBarItem>
+                </router-link>
+            </li>
+            <li>
+                <router-link to="/calendar">
+                    <SideBarItem v-bind:icon="['fas', 'calendar-alt']" title="Calendar" :active="currentRoute=='/calendar'"></SideBarItem>
+                </router-link>
+            </li>
+            <li>
+                <router-link to="/report">
+                    <SideBarItem v-bind:icon="['fas', 'chart-line']" title="Report" :active="currentRoute=='/report'"></SideBarItem>
+                </router-link>
+            </li>
+            <li>
+                 <router-link to="/settings">
+                    <SideBarItem v-bind:icon="['fas', 'cog']" title="Settings" :active="currentRoute=='/settings'"></SideBarItem>
+                </router-link>
+            </li>
+        </ul>
+    </div>
+</template>
+<script>
+import SideBarItem from './SidebarItem.vue';
+
+
+export default {
+    data: function() {
+        return {
+            currentRoute: this.$router.currentRoute.path
+        }
+    },
+    components: {
+        SideBarItem
+    },
+    watch: {
+        '$route' (to, from){
+            console.log(to);
+            this.currentRoute = to.path
+        }
+    },
+    created: function() {
+        console.log(this.$router.currentRoute.path);
+    }
+}
+
+</script>
