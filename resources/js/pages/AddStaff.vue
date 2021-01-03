@@ -2,7 +2,7 @@
   <div class="page-container">
     <p class="title">
       <font-awesome-icon icon="plus" />
-      <span class="pl-2">Add Task</span>
+      <span class="pl-2">Add Staff</span>
     </p>
     <div class="pt-2">
       <div class="form-control">

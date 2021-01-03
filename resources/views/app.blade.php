@@ -7,6 +7,8 @@
         <script>window.laravel={ csrf_token: '{{ csrf_token() }}' }</script>
         <title>CRM</title>
 
+        <link rel="shortcut icon" href="images/crm_logo.png" type="image/png">
+
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 

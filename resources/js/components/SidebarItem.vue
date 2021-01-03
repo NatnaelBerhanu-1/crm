@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-row py-3 px-6" :class="active ? 'bg-primary-dark text-white' : 'text-gray-100'">
         <div class="w-6 text-start">
-            <font-awesome-icon :icon="icon" size="x"  />
+            <font-awesome-icon :icon="icon"  />
         </div>
         <p class="font-semibold">{{title}}</p>
     </div>

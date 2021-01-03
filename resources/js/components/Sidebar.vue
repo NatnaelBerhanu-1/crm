@@ -18,8 +18,8 @@
                 </router-link>
             </li>
             <li>
-                <router-link to="/warehouse">
-                    <SideBarItem v-bind:icon="['fas', 'camera']" title="Warehouse" :active="currentRoute=='/warehouse'"></SideBarItem>
+                <router-link to="/inventory">
+                    <SideBarItem v-bind:icon="['fas', 'camera']" title="Inventory" :active="currentRoute=='/inventory'"></SideBarItem>
                 </router-link>
             </li>
             <li>

@@ -35,7 +35,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <div class="bg-white p-4  mt-8 shadow-sm">
@@ -107,7 +107,7 @@
 import LineChart from '../components/LineChart.vue';
 export default {
     components: {LineChart}
-    
+
 }
 </script>
 <style lang="css">
@@ -123,7 +123,7 @@ export default {
         @apply border;
     }
 
-    tr:nth-child(even){
+    tbody tr:nth-child(odd){
         @apply bg-gray-100
     }
     tr:first-child {
@@ -142,8 +142,12 @@ export default {
         @apply text-sm bg-primary text-white px-3 py-2 mt-2 rounded;
     }
 
-    input, select {
-        @apply border border-gray-300 rounded-sm w-96 p-1 my-1 px-3 font-normal text-sm;
+    input, select, textarea {
+        @apply border border-gray-300 rounded-sm p-1 my-1 px-3 font-normal text-sm h-9;
+    }
+
+    input[type='datetime-local']{
+        @apply w-full;
     }
 
     .form-control {
@@ -154,17 +158,22 @@ export default {
         @apply font-medium;
     }
 
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus {
         outline: none;
         @apply border-primary;
     }
-    
+
     label {
         @apply text-sm;
     }
 
     .page-container{
         @apply bg-white w-full p-4 shadow-sm;
+    }
+
+    button:disabled {
+        opacity: .6;
+        cursor: progress;
     }
 
 </style>

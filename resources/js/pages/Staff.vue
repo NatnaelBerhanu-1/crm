@@ -8,7 +8,7 @@
       <router-link to="add" append>
         <div class="bg-primary h-8 text-white px-2 rounded text-sm flex flex-row items-center">
           <font-awesome-icon icon="plus" size="sm" />
-          <span class="pl-2">Add Staff</span>
+          <span class="ml-1">Add Staff</span>
         </div>
       </router-link>
     </div>
@@ -29,9 +29,9 @@
             <td>0919298886</td>
             <td>Admin</td>
             <td>12/03/2020</td>
-            <td class="text-gray-900">
-              <font-awesome-icon icon="pencil-alt" class="mr-2 cursor-pointer" />
-              <font-awesome-icon icon="trash" class="cursor-pointer" />
+            <td class="text-gray-300">
+              <font-awesome-icon icon="pencil-alt" class="mr-2 hover:text-blue-400 cursor-pointer" />
+              <font-awesome-icon icon="trash" class="hover:text-red-400 cursor-pointer" />
             </td>
           </tr>
           <tr class>
@@ -39,9 +39,9 @@
             <td>0919298886</td>
             <td>Admin</td>
             <td>12/03/2020</td>
-            <td class="text-gray-900">
-              <font-awesome-icon icon="pencil-alt" class="mr-2 cursor-pointer" />
-              <font-awesome-icon icon="trash" class="cursor-pointer" />
+            <td class="text-gray-300">
+              <font-awesome-icon icon="pencil-alt" class="mr-2 hover:text-blue-400 cursor-pointer" />
+              <font-awesome-icon icon="trash" class="hover:text-red-400 cursor-pointer" />
             </td>
           </tr>
         </tbody>
