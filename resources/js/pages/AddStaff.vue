@@ -4,8 +4,8 @@
       <font-awesome-icon icon="plus" />
       <span class="pl-2">Add Staff</span>
     </p>
-    <div class="pt-2">
-      <div class="form-control">
+    <div class="pt-2 w-96">
+      <div class="form-control w-full">
         <label for>Full Name</label>
         <br />
         <input type="text" name="full-name" id="full-name" placeholder="Name" />
@@ -36,5 +36,8 @@
     </div>
   </div>
 </template>
-<style>
+<style scoped>
+    .form-control input, .form-control select {
+        @apply w-full;
+    }
 </style>

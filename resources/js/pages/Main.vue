@@ -9,7 +9,7 @@
                     N
                 </button>
                 <div v-show="logoutModalState" v-on-clickaway="hideLogoutModal" class="bg-white absolute flex right-4 top-16 w-32 p-2 shadow-md hover:bg-primary hover:text-white">
-                    <button class="w-full text-left">Logout</button>
+                    <button class="w-full text-left" @click="logout">Logout</button>
                 </div>
             </header>
             <div class="p-8 overflow-y-auto ">
@@ -38,6 +38,10 @@ export default {
                 this.logoutModalState = false;
             }
             // console.log(this.logoutModalState);
+        },
+        logout: function() {
+            localStorage.removeItem('user');
+            this.$router.push('/login');
         }
     },
     components: {Sidebar}

@@ -14,6 +14,9 @@ import AddInventory from "./pages/AddInventory";
 import AddReport from "./pages/AddReport";
 import EditTask from "./pages/EditTask.vue";
 import EditInventory from "./pages/EditInventory";
+import Login from "./pages/Login";
+import localService from "./localservice";
+import localservice from "./localservice";
 
 Vue.use(VueRouter);
 
@@ -39,42 +42,46 @@ const routes = [
                 component: Settings
             },
             {
-                path: 'inventory',
+                path: "inventory",
                 component: Inventory
             },
             {
-                path: 'staff',
-                component: Staff,
+                path: "staff",
+                component: Staff
             },
             {
-                path: 'report',
+                path: "report",
                 component: Report
             },
             {
-                path: 'staff/add',
+                path: "staff/add",
                 component: AddStaff
             },
             {
-                path: 'tasks/add',
+                path: "tasks/add",
                 component: AddTask
             },
             {
-                path: 'tasks/edit',
+                path: "tasks/edit",
                 component: EditTask
             },
             {
-                path: 'inventory/add',
+                path: "inventory/add",
                 component: AddInventory
             },
             {
-                path: 'inventory/edit',
+                path: "inventory/edit",
                 component: EditInventory
             },
             {
-                path: 'report/add',
+                path: "report/add",
                 component: AddReport
             }
         ]
+    },
+    {
+        path: "/login",
+        component: Login
     }
 ];
 
@@ -85,21 +92,46 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     //TODO: do authentication and authorization here
-    var isAuthenticated = true;
-    var allPaths = ['dashboard', 'tasks', 'calendar', 'settings', 'inventory', 'staff', 'report', 'tasks/edit', 'tasks/add', 'inventory/edit', 'inventory/add', 'staff/add', 'staff/edit', 'report/add', 'report/edit', ];
-    if (isAuthenticated) {
-        console.log()
+    var allPaths = [
+        "login",
+        "dashboard",
+        "tasks",
+        "calendar",
+        "settings",
+        "inventory",
+        "staff",
+        "report",
+        "tasks/edit",
+        "tasks/add",
+        "inventory/edit",
+        "inventory/add",
+        "staff/add",
+        "staff/edit",
+        "report/add",
+        "report/edit"
+    ];
+    var forStaff = ["calendar", "settings"];
+    if (localService.isAuthenticated()) {
         console.log(`path: ${to.path.slice(1)}`);
-        if(allPaths.indexOf(to.path.slice(1)) == -1){
-            next({path: '/dashboard'});
-        }else{
-            next();
+        if (allPaths.indexOf(to.path.slice(1)) == -1) {
+            next({ path: "/dashboard" });
+        } else {
+            if (localService.isAdmin()) {
+                next();
+            }else if(localservice.isStaff()){
+                if(forStaff.indexOf(to.path.slice(1)) != -1){
+                    next();
+                }else{
+                    next('/calendar');
+                }
+            }
         }
-    }else{
+    } else if (!localService.isAuthenticated() && to.path == "/login") {
         next();
+    } else {
+        console.log("here");
+        next("/login");
     }
-
-
-})
+});
 
 export default router;

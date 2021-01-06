@@ -6,7 +6,7 @@
     </p>
     <div class="mt-2">
         <p class="mb-2">Change Password</p>
-      <div class="px-2 pb-2 w-min border">
+      <div class="px-2 pb-2 w-96 border">
         <div class="form-control">
           <label for>Old Password</label>
           <br />
@@ -40,3 +40,8 @@
     </div>
   </div>
 </template>
+<style scoped>
+    .form-control input{
+        width: 100%;
+    }
+</style>

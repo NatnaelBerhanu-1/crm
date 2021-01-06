@@ -23,9 +23,8 @@ class UserController extends Controller
             return $this->sendResponse(200, $users, 'Resource fetched successfully');
         } catch (Exception $e) {
             // echo($e);
-            return $this->sendResponse(500,null, 'Something went wrong');
+            return $this->sendResponse(500, null, 'Something went wrong');
         }
-
     }
 
     /**
@@ -46,32 +45,40 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required',
-            'phone_number' => 'required',
-            'role' => 'required',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required',
+                'phone_number' => 'required',
+                'role' => 'required',
+            ]);
 
-        if($validated){
+            if ($validated) {
 
-            $name = $request->input('name');
-            $phone_number = $request->input('phone_number');
-            $role = $request->input('role');
+                $name = $request->input('name');
+                $phone_number = $request->input('phone_number');
+                $role = $request->input('role');
 
-            $user = User::where('phone_number', $phone_number)->first();
+                $user = User::where('phone_number', $phone_number)->first();
 
-            if(is_null($user)){
-                $user =  User::create([
-                    'name'=>$name,
-                    'phone_number'=>$phone_number,
-                    'role'=>$role,
-                    'password'=>Hash::make('1234')
-                ]);
+                if (is_null($user)) {
+                    $user =  User::create([
+                        'name' => $name,
+                        'phone_number' => $phone_number,
+                        'role' => $role,
+                        'password' => Hash::make('1234')
+                    ]);
 
-                return $this->sendResponse(201, $user, 'Resource created successfully');
-            }else{
-                return $this->sendResponse(400, '', 'Phone number already taken');
+                    return $this->sendResponse(201, $user, 'Resource created successfully');
+                } else {
+                    return $this->sendResponse(400, '', 'Phone number already taken');
+                }
             }
+        }catch (\Illuminate\Validation\ValidationException $e) {
+            echo ($e->validator->getMessageBag());
+            return $this->sendResponse(500, null, 'Something went wrong');
+        } catch (Exception $e) {
+            echo ($e);
+            $this->sendResponse(500, null, 'Something went wrong');
         }
     }
 
@@ -83,14 +90,14 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        try{
+        try {
             $user = User::where('id', $id)->first();
-            if(isset($user)){
+            if (isset($user)) {
                 return $this->sendResponse(200, $user, 'Resource fetched successfully');
-            }else{
+            } else {
                 return $this->sendResponse(404, null, 'Resource not found');
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return $this->sendResponse(500, null, 'Something went wrong');
         }
     }
@@ -126,6 +133,17 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $user = User::where('id', $id)->first();
+            if (isset($user)) {
+                $user->delete();
+                return $this->sendResponse(204, null, "Resource deleted successfully");
+            } else {
+                return $this->sendResponse(404, null, "Not Found");
+            }
+        } catch (Exception $e) {
+            echo ($e);
+            return $this->sendResponse(500, null, "Something went wrong");
+        }
     }
 }

@@ -114,7 +114,7 @@ const actions = {
         commit("setDeleteItemStatus", "busy");
         Axios.delete(`/api/items/${id}`).then(response => {
             console.log(response);
-            if(response.status == 201){
+            if(response.status == 204){
                 commit("setDeleteItemStatus", "success");
                 commit("removeItemById", id);
             }else{

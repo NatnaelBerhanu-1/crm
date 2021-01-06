@@ -2,22 +2,22 @@
     <div class="text-white py-4">
         <h1 class="font-bold text-3xl px-6">CRM</h1>
         <ul class="p-0 mt-6">
-            <li>
+            <li v-if="isAdmin">
                 <router-link to="/dashboard">
                     <SideBarItem v-bind:icon="['fas', 'tachometer-alt']" title="Dashboard" :active="currentRoute=='/dashboard'"></SideBarItem>
                 </router-link>
             </li>
-            <li>
+            <li v-if="isAdmin">
                 <router-link to="/staff">
                     <SideBarItem v-bind:icon="['fas', 'id-card']" title="Staff" :active="currentRoute=='/staff'"></SideBarItem>
                 </router-link>
             </li>
-            <li>
+            <li v-if="isAdmin">
                 <router-link to="/tasks">
                     <SideBarItem v-bind:icon="['fas', 'tasks']" title="Tasks" :active="currentRoute=='/tasks'"></SideBarItem>
                 </router-link>
             </li>
-            <li>
+            <li v-if="isAdmin">
                 <router-link to="/inventory">
                     <SideBarItem v-bind:icon="['fas', 'camera']" title="Inventory" :active="currentRoute=='/inventory'"></SideBarItem>
                 </router-link>
@@ -27,7 +27,7 @@
                     <SideBarItem v-bind:icon="['fas', 'calendar-alt']" title="Calendar" :active="currentRoute=='/calendar'"></SideBarItem>
                 </router-link>
             </li>
-            <li>
+            <li v-if="isAdmin">
                 <router-link to="/report">
                     <SideBarItem v-bind:icon="['fas', 'chart-line']" title="Report" :active="currentRoute=='/report'"></SideBarItem>
                 </router-link>
@@ -42,12 +42,13 @@
 </template>
 <script>
 import SideBarItem from './SidebarItem.vue';
-
+import localService from '../localservice';
 
 export default {
     data: function() {
         return {
-            currentRoute: this.$router.currentRoute.path
+            currentRoute: this.$router.currentRoute.path,
+            isAdmin: localService.isAdmin(),
         }
     },
     components: {

@@ -182,7 +182,7 @@ class ItemController extends Controller
             $item = Item::where('id', $id)->first();
             if (isset($item)) {
                 $item->delete();
-                return $this->sendResponse(201, null, 'Resource deleted succussfully');
+                return $this->sendResponse(204, null, 'Resource deleted succussfully');
             } else {
                 return $this->sendResponse(404, null, 'Resource not found');
             }

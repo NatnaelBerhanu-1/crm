@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AuthenticationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +25,5 @@ Route::get('', function () {
 Route::resource('users', 'UserController');
 Route::resource('tasks', 'TaskController');
 Route::resource('items', 'ItemController');
+Route::resource('reports', 'ReportController');
+Route::post('login', 'AuthenticationController@Login');

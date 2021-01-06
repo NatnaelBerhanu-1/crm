@@ -6,13 +6,13 @@
     </p>
     <Alert
       type="success"
-      message="Task Added Successfully"
+      message="Report Added Successfully"
       :onClose="onClose"
       v-if="addReportStatus == 'success'"
     />
     <Alert
       type="failure"
-      message="Failed adding task"
+      message="Failed adding report"
       v-else-if="addReportStatus == 'failure'"
       :onClose="onClose"
     />
@@ -20,14 +20,13 @@
       <form action v-on:submit="addReport" method="post">
         <div class="form-control">
           <label>Income amount</label>
-          <br />
+          <br/>
           <input
             type="number"
             min="0"
             v-model="report.income_amount"
             id="income-amount"
             placeholder="Income amount"
-            required
           />
         </div>
         <div class="form-control">
@@ -38,7 +37,6 @@
             v-model="report.income_description"
             id="income-description"
             placeholder="Income description"
-            required
           />
         </div>
         <div class="form-control">
@@ -50,7 +48,6 @@
             v-model="report.expense_amount"
             id="expense_amount"
             placeholder="Expense amount"
-            required
           />
         </div>
         <div class="form-control">
@@ -61,7 +58,6 @@
             v-model="report.expense_description"
             id="expense-description"
             placeholder="Expense description"
-            required
           />
         </div>
         <div class="form-control">
@@ -75,32 +71,16 @@
             required
           />
         </div>
-        <div class="form-control">
-          <label>Condition</label>
-          <br />
-          <input
-            type="text"
-            v-model="report.condition"
-            id="condition"
-            placeholder="Condition"
-            required
-          />
-        </div>
-        <div class="form-control">
-          <label>Remarks</label>
-          <br />
-          <textarea v-model="report.remark" id="remark" placeholder="Remark"></textarea>
-        </div>
         <div class="form-control" v-if="addReportStatus=='busy'">
           <button type="submit" class="btn-primary" disabled>
             <font-awesome-icon icon="spinner" spin size="sm" />
-            <span>Add Inventory</span>
+            <span>Add Report</span>
           </button>
         </div>
         <div class="form-control" v-else>
           <button class="btn-primary">
             <font-awesome-icon icon="plus" size="sm" />
-            <span>Add Inventory</span>
+            <span>Add Report</span>
           </button>
         </div>
       </form>

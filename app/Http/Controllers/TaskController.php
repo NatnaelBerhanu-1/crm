@@ -7,6 +7,7 @@ use App\Models\Task;
 use Carbon\Traits\Date;
 use DateTime;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
@@ -15,13 +16,26 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $tasks = Task::paginate();
+            if($request->query('filterBy')=='date'){
+                if($request->query('type')=='print'){
+                    $tasks = Task::whereDate('print_date',$request->query('date'))->get();
+                }else{
+                    $tasks = Task::whereDate('shot_date',$request->query('date'))->get();
+                }
+            }
+            else if($request->query('groupBy')=='date'){
+                $shotTasks = Task::select(DB::raw('DATE(shot_date) as date'), DB::raw('count(*) as title'), DB::raw('\'shot\' as type'))->groupBy('shot_date');
+                $printTasks = Task::select(DB::raw('DATE(print_date) as date'), DB::raw('count(*) as title'), DB::raw('\'print\' as type'))->groupBy('print_date')->union($shotTasks)->get();
+                return $this->sendResponse(200, $printTasks, 'Resource fetched successfully');
+            }else{
+                $tasks = Task::paginate();
+            }
             return $this->sendResponse(200, $tasks, 'Resource fetched successfully');
         } catch (Exception $e) {
-            // echo($e);
+            echo($e);
             return $this->sendResponse(500, null, 'Something went wrong');
         }
     }
@@ -61,7 +75,6 @@ class TaskController extends Controller
                 'status' => 'required',
                 'user_id' => 'required'
             ]);
-            echo('here');
 
             if ($validated) {
                 $name = $request->input('name');
@@ -237,7 +250,7 @@ class TaskController extends Controller
             $task = Task::where('id', $id)->first();
             if (isset($task)) {
                 $task->delete();
-                return $this->sendResponse(201, null, 'Resource deleted succussfully');
+                return $this->sendResponse(204, null, 'Resource deleted succussfully');
             } else {
                 return $this->sendResponse(404, null, 'Resource not found');
             }
