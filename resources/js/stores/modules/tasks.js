@@ -14,7 +14,8 @@ const state = () => ({
         package: "",
         status: ""
     },
-    calendarTasks: []
+    calendarTasks: [],
+    initData: {}
 });
 
 //getters
@@ -39,6 +40,9 @@ const getters = {
     },
     calendarTasks: (state, getters) => {
         return state.calendarTasks;
+    },
+    initData: (state, getters) => {
+        return state.initData;
     }
 };
 const mutations = {
@@ -69,6 +73,9 @@ const mutations = {
     },
     setCalendarTasks(state, payload) {
         state.calendarTasks = payload;
+    },
+    setInitData(state, payload) {
+        state.initData = payload;
     }
 };
 const actions = {
@@ -185,6 +192,16 @@ const actions = {
     },
     resetDeleteTaskStatus({ commit, state }) {
         commit("setDeleteTaskStatus", "");
+    },
+    getInitData({commit, state}) {
+        Axios.get('/api/init').then(response=> {
+            console.log(response);
+            if(response.status == 200)
+            commit("setInitData", response);
+        })
+        .catch(error => {
+            console.log(error.response);
+        })
     }
 };
 

@@ -6,22 +6,24 @@
   export default {
     extends: Line,
     props: {
-        color: String
+        color: String,
+        data: Array,
+        label: String
     },
     data () {
       return {
         datacollection: {
           //Data to be represented on x-axis
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
           datasets: [
             {
-              label: 'Data One',
+              label: this.label,
               backgroundColor: this.color,
-              pointBackgroundColor: 'white',
-              borderWidth: 1,
-              pointBorderColor: '#249EBF',
+              pointRadius: 0,
+              borderWidth: 2,
+              borderColor: "#3D68FF",
               //Data to be represented on y-axis
-              data: [40, 20, 30, 50, 90, 10, 20, 40, 50, 70, 90, 100]
+              data: this.data
             }
           ]
         },
@@ -33,7 +35,7 @@
                 beginAtZero: true
               },
               gridLines: {
-                display: true
+                display: false
               }
             }],
             xAxes: [ {
@@ -41,9 +43,6 @@
                 display: false
               }
             }]
-          },
-          legend: {
-            display: true
           },
           responsive: true,
           maintainAspectRatio: false

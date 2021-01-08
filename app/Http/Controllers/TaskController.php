@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Report;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use Carbon\Traits\Date;
@@ -262,6 +263,23 @@ class TaskController extends Controller
             }
         } catch (Exception $e) {
             return $this->sendResponse(500, null, 'Something went wrong');
+        }
+    }
+
+    public function getInitDate(){
+        try{
+            $year =  date('Y');
+            $today = date('Y-m-d H:i:s');
+            $monthlyTasks = Task::select(DB::raw('count(id) as data, date_part(\'month\', created_at) as month, date_part(\'year\', created_at) as year'))->whereYear('created_at',  $year)->groupBy('month', 'year')->get();
+            $monthlyEarning = Report::select(DB::raw('sum(income_amount) as data, date_part(\'month\', date) as month, date_part(\'year\', date) as year'))->whereYear('date',  $year)->groupBy('month', 'year')->get();
+            $completedTasks = Task::where('print_date', '<', $today)->count();
+            $ongoingTasks = Task::where('print_date', '>=', $today)->count();
+            $upcomingTasks = Task::where('print_date', '>=', $today)->limit(5)->get();
+            $data = ['monthlyTasks'=>$monthlyTasks, 'monthlyEarning'=>$monthlyEarning, 'completedTasks'=>$completedTasks, 'ongoingTasks'=>$ongoingTasks, 'upcomingTasks'=>$upcomingTasks];
+            return $this->sendResponse(200, $data, "Resource feteched successfully");
+        }catch(Exception $e){
+            echo($e);
+            $this->sendResponse(500, null, "Something went wrong");
         }
     }
 }

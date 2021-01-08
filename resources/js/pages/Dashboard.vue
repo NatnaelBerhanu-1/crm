@@ -1,16 +1,16 @@
 <template>
-    <div>
+    <div v-if="initData.status == 200">
         <div class="grid grid-cols-8 grid-rows-2 h-60 gap-2">
             <div class="col-span-3 row-span-2">
                 <p class="text-lg">Monthly Earning</p>
                 <div class="mt-2 bg-white h-52 shadow-sm">
-                    <line-chart class="w-full h-full" color="#FFE0E6"></line-chart>
+                    <line-chart class="w-full h-full" color="#FFE0E6" :data="formatForGraph(initData.data.data.monthlyEarning)" label="Monthly earning"></line-chart>
                 </div>
             </div>
             <div class="col-span-3 row-span-2">
                 <p class="text-lg">Monthly Tasks</p>
                 <div class="mt-2 bg-white h-52 shadow-sm">
-                    <line-chart class="w-full h-full" color="#CDEBFF"></line-chart>
+                    <line-chart class="w-full h-full" color="#CDEBFF" :data="formatForGraph(initData.data.data.monthlyTasks)" label="Monthly tasks"></line-chart>
                 </div>
             </div>
             <div class="col-span-2 row-span-2">
@@ -22,7 +22,7 @@
                         </div>
                         <div class="bg-white w-auto pt-2 pl-2 shadow-sm">
                             <p class="text-lg ">In progress</p>
-                            <p class="text-xl font-bold ">20</p>
+                            <p class="text-xl font-bold ">{{initData.data.data.ongoingTasks}}</p>
                         </div>
                     </div>
                     <div class="w-full bg-white col-span-1 row-span-1 h-full flex flex-row">
@@ -31,7 +31,7 @@
                         </div>
                         <div class="bg-white w-auto pt-2 pl-2 shadow-sm">
                             <p class="text-lg ">Completed</p>
-                            <p class="text-xl font-bold ">18</p>
+                            <p class="text-xl font-bold ">{{initData.data.data.completedTasks}}</p>
                         </div>
                     </div>
                 </div>
@@ -49,53 +49,20 @@
                         <tr class="bg-white text-black-54">
                             <th>Name</th>
                             <th>Phone number</th>
-                            <th>Event name</th>
+                            <th>Event type</th>
                             <th>Place</th>
-                            <th>Date</th>
+                            <th>Shot Date</th>
+                            <th>Print Date</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr >
-                            <td>Natnael</td>
-                            <td>0919298886</td>
-                            <td>Photoshot</td>
-                            <td>Studio</td>
-                            <td>12/03/2020</td>
-                        </tr>
-                        <tr >
-                            <td>Natnael</td>
-                            <td>0919298886</td>
-                            <td>Photoshot</td>
-                            <td>Studio</td>
-                            <td>12/03/2020</td>
-                        </tr>
-                        <tr >
-                            <td>Natnael</td>
-                            <td>0919298886</td>
-                            <td>Photoshot</td>
-                            <td>Studio</td>
-                            <td>12/03/2020</td>
-                        </tr>
-                        <tr >
-                            <td>Natnael</td>
-                            <td>0919298886</td>
-                            <td>Photoshot</td>
-                            <td>Studio</td>
-                            <td>12/03/2020</td>
-                        </tr>
-                        <tr >
-                            <td>Natnael</td>
-                            <td>0919298886</td>
-                            <td>Photoshot</td>
-                            <td>Studio</td>
-                            <td>12/03/2020</td>
-                        </tr>
-                        <tr >
-                            <td>Natnael</td>
-                            <td>0919298886</td>
-                            <td>Photoshot</td>
-                            <td>Studio</td>
-                            <td>12/03/2020</td>
+                        <tr v-for="task in initData.data.data.upcomingTasks" :key="task.id">
+                            <td>{{task.name}}</td>
+                            <td>{{task.phone_number}}</td>
+                            <td>{{task.type}}</td>
+                            <td>{{task.location}}</td>
+                            <td>{{task.shot_date}}</td>
+                            <td>{{task.print_date}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -106,7 +73,25 @@
 <script>
 import LineChart from '../components/LineChart.vue';
 export default {
-    components: {LineChart}
+    components: {LineChart},
+    computed: {
+        initData: function() {
+            return this.$store.getters.initData;
+        }
+    },
+    created: function(){
+        this.$store.dispatch('getInitData');
+    },
+    methods: {
+        formatForGraph(data){
+            var randomArr = Array(12).fill(0);
+            data.forEach(element => {
+                randomArr[data.indexOf(element)] = element.data;
+            });
+            console.log(randomArr);
+            return randomArr;
+        }
+    }
 
 }
 </script>

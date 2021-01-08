@@ -28,3 +28,4 @@ Route::resource('items', 'ItemController');
 Route::resource('reports', 'ReportController');
 Route::post('login', 'AuthenticationController@Login');
 Route::put('changePassword', 'UserController@changePassword');
+Route::get('init', 'TaskController@getInitDate');
