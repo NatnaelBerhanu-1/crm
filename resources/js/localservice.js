@@ -22,8 +22,13 @@ var isStaff = function() {
     }
 }
 
+var user = function() {
+    return JSON.parse(localStorage.getItem('user'));
+}
+
 export default{
     isAuthenticated,
     isAdmin,
-    isStaff
+    isStaff,
+    user
 }

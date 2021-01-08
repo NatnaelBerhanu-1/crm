@@ -16,7 +16,8 @@ import EditTask from "./pages/EditTask.vue";
 import EditInventory from "./pages/EditInventory";
 import Login from "./pages/Login";
 import localService from "./localservice";
-import localservice from "./localservice";
+import EditStaff from "./pages/EditStaff";
+import EditReport from "./pages/EditReport";
 
 Vue.use(VueRouter);
 
@@ -76,7 +77,15 @@ const routes = [
             {
                 path: "report/add",
                 component: AddReport
-            }
+            },
+            {
+                path: "staff/edit",
+                component: EditStaff
+            },
+            {
+                path: "report/edit",
+                component: EditReport
+            },
         ]
     },
     {
@@ -118,7 +127,7 @@ router.beforeEach((to, from, next) => {
         } else {
             if (localService.isAdmin()) {
                 next();
-            }else if(localservice.isStaff()){
+            }else if(localService.isStaff()){
                 if(forStaff.indexOf(to.path.slice(1)) != -1){
                     next();
                 }else{

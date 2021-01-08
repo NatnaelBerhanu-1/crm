@@ -16,7 +16,7 @@ class ItemController extends Controller
     public function index()
     {
         try {
-            $items = Item::paginate();
+            $items = Item::paginate(10);
             return $this->sendResponse(200, $items, "Resource fetched successfully");
         } catch (Exception $e) {
             echo ($e);

@@ -19,7 +19,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = User::paginate();
+            $users = User::all();
             return $this->sendResponse(200, $users, 'Resource fetched successfully');
         } catch (Exception $e) {
             // echo($e);
@@ -73,7 +73,7 @@ class UserController extends Controller
                     return $this->sendResponse(400, '', 'Phone number already taken');
                 }
             }
-        }catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             echo ($e->validator->getMessageBag());
             return $this->sendResponse(500, null, 'Something went wrong');
         } catch (Exception $e) {
@@ -122,7 +122,49 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+
+            $user = User::where('id', $id)->first();
+
+            if (isset($user)) {
+                $validated = $request->validate([
+                    'name' => 'required',
+                    'phone_number' => 'required',
+                    'role' => 'required',
+                ]);
+
+                if ($validated) {
+
+                    $name = $request->input('name');
+                    $phone_number = $request->input('phone_number');
+                    $role = $request->input('role');
+
+                    if ($user->phone_number == $phone_number) {
+                        $user->name = $name;
+                        $user->role = $role;
+                    } else {
+                        $existingUser = User::where('phone_number', $phone_number)->first();
+                        if (is_null($existingUser)) {
+                            $user->name = $name;
+                            $user->role = $role;
+                            $user->phone_number = $phone_number;
+                        } else {
+                            return $this->sendResponse(400, '', 'Phone number already taken');
+                        }
+                    }
+                    $user->save();
+                    return $this->sendResponse(200, $user, 'Resource updated successfully');
+                }
+            } else {
+                return $this->sendResponse(404, null, "Resource not found");
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            echo ($e->validator->getMessageBag());
+            return $this->sendResponse(500, null, 'Something went wrong');
+        } catch (Exception $e) {
+            echo ($e);
+            $this->sendResponse(500, null, 'Something went wrong');
+        }
     }
 
     /**
@@ -143,6 +185,29 @@ class UserController extends Controller
             }
         } catch (Exception $e) {
             echo ($e);
+            return $this->sendResponse(500, null, "Something went wrong");
+        }
+    }
+
+    public function changePassword(Request $request){
+        try {
+            $user = User::where('id', $request->id)->first();
+            if(isset($user)){
+                $oldpassword = $request->old_password;
+                $newpassword = $request->new_password;
+
+                if(Hash::check($oldpassword, $user->password)){
+                    $user->password = Hash::make($newpassword);
+                    $user->save();
+                    return $this->sendResponse(200, $user, "Resource updated successfully");
+                }else{
+                    return $this->sendResponse(401, null, "Password not correct");
+                }
+            }else{
+                return $this->sendResponse(404, null, "Resource not found");
+            }
+        } catch (Exception $e) {
+            echo($e);
             return $this->sendResponse(500, null, "Something went wrong");
         }
     }

@@ -22,7 +22,7 @@ class ReportController extends Controller
                 $reports = Report::whereBetween('date', [strval($from), strval($to)])->get();
                 return $this->sendResponse(200, $reports, "Resource fetched successfully");
             }
-            $reports = Report::paginate();
+            $reports = Report::paginate(10);
             return $this->sendResponse(200, $reports, "Resource fetched successfully");
         } catch (Exception $e) {
             echo ($e);
@@ -83,7 +83,17 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        //
+        try{
+            $report = Report::where('id', $id)->first();
+            if(isset($report)){
+                return $this->sendResponse(200, $report, "Resource fetched successfully");
+            }else{
+                return $this->sendResponse(400, null, "Resource not found");
+            }
+        }catch(Exception $e){
+            echo($e);
+            return $this->sendResponse(500, null, "Something went wrong");
+        }
     }
 
     /**
@@ -106,7 +116,34 @@ class ReportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $report = Report::where('id', $id)->first();
+
+            if(isset($report)){
+                $validated = $request->validate([
+                    'date' => 'required'
+                ]);
+                if ($validated) {
+                    $report->income_amount = $request->income_amount;
+                    $report->income_description = $request->income_description;
+                    $report->expense_amount = $request->expense_amount;
+                    $report->expense_description = $request->expense_description;
+                    $report->date = $request->date;
+                    $report->save();
+                    return $this->sendResponse(200, $report, "Resource updated successfully");
+                }
+            }else{
+                return $this->sendResponse(400, null, "Resource not found");
+            }
+
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            echo ($e->validator->getMessageBag());
+            return $this->sendResponse(500, null, 'Something went wrong');
+        } catch (Exception $e) {
+            echo ($e);
+            return $this->sendResponse(500, null, "Something went wrong");
+        }
     }
 
     /**

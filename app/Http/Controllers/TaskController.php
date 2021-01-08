@@ -30,8 +30,14 @@ class TaskController extends Controller
                 $shotTasks = Task::select(DB::raw('DATE(shot_date) as date'), DB::raw('count(*) as title'), DB::raw('\'shot\' as type'))->groupBy('shot_date');
                 $printTasks = Task::select(DB::raw('DATE(print_date) as date'), DB::raw('count(*) as title'), DB::raw('\'print\' as type'))->groupBy('print_date')->union($shotTasks)->get();
                 return $this->sendResponse(200, $printTasks, 'Resource fetched successfully');
-            }else{
-                $tasks = Task::paginate();
+            }
+            else if($request->query('search')!=null){
+                $condition = "%{$request->query('search')}%";
+                $tasks = Task::where('phone_number', 'like', $condition)->orWhere('name', 'like', $condition)->paginate(10);
+            }
+            else{
+                $tasks = Task::paginate(10);
+                $tasks->withPath('');
             }
             return $this->sendResponse(200, $tasks, 'Resource fetched successfully');
         } catch (Exception $e) {

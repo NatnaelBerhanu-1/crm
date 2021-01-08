@@ -63,6 +63,9 @@
           </tr>
         </tbody>
       </table>
+      <Pagination
+        :data="{prev_page_url:{page: items.data.data.prev_page_url}, next_page_url:{page: items.data.data.next_page_url}, cur_page:items.data.data.current_page, total_page:items.data.data.last_page, get: 'getItems'}"
+      ></Pagination>
     </div>
     <div v-else class="text-center text-primary">
       <font-awesome-icon icon="spinner" spin size="2x" />
@@ -78,10 +81,11 @@ th {
 <script>
 import Alert from "../components/Alert";
 import helperMixin from "../mixins/helper";
+import Pagination from "../components/Pagination";
 
 export default {
   components: {
-    Alert,
+    Alert,Pagination
   },
   mixins: [helperMixin],
   computed: {

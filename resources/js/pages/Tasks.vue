@@ -10,11 +10,11 @@
           <div class="form-control ml-3">
             <input
               type="text"
-              name="search"
+              v-model="searchVal"
               class="mt-0 border-gray-400 w-60 h-7"
               placeholder="Search.."
             />
-            <button
+            <button @click="search"
               class="bg-white ml-2 h-8 text-gray-500 px-2 border-gray-400 border rounded text-sm hover:bg-primary hover:text-white"
             >
               <font-awesome-icon icon="search" size="sm" class="mr-2" />Search
@@ -94,6 +94,7 @@
             </tr>
           </tbody>
         </table>
+        <Pagination :data="{prev_page_url:{page: tasks.data.data.prev_page_url, search: searchVal}, next_page_url:{page:tasks.data.data.next_page_url, search: searchVal}, cur_page:tasks.data.data.current_page, total_page:tasks.data.data.last_page, get: 'getTasks'}"></Pagination>
       </div>
       <div v-else class="text-center text-primary">
         <font-awesome-icon icon="spinner" spin size="2x" />
@@ -122,8 +123,14 @@ td {
 </style>
 <script>
 import Alert from "../components/Alert";
+import Pagination from "../components/Pagination";
 
 export default {
+    data: function(){
+        return {
+            searchVal: null
+        }
+    },
   computed: {
     tasks: function () {
       return this.$store.getters.tasks;
@@ -136,7 +143,7 @@ export default {
     this.$store.dispatch("getTasks");
   },
   components: {
-    Alert,
+    Alert,Pagination
   },
   methods: {
     parseDate: function (rawdate) {
@@ -150,6 +157,9 @@ export default {
       if (resp) {
         this.$store.dispatch("deleteTask", taskId);
       }
+    },
+    search: function(){
+        this.$store.dispatch("getTasks", {page: 1, search: this.searchVal});
     },
     onClose: function (e) {
       this.$store.dispatch("resetDeleteTaskStatus");

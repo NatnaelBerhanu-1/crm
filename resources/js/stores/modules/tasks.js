@@ -72,13 +72,18 @@ const mutations = {
     }
 };
 const actions = {
-    getTasks({ commit, state }, data = { url: "" }) {
-        if (data.url == "") {
-            data.url = "/api/tasks?page=1";
+    getTasks({ commit, state }, data = {page: 1, search: null}) {
+        var baseUrl = '/api/tasks?page=';
+        var url = baseUrl+ data.page;
+        if(data.search!=null){
+            url = url +  `&search=${data.search}`
         }
-        Axios.get(data.url).then(response => {
-            console.log(response.data);
-            commit("setTasks", response);
+        console.log(url);
+        console.log(data.search);
+        Axios.get(url).then(response => {
+            // console.log(editResponseWithPagination(response));
+            // console.log(editResponseWithPagination(response));
+            commit("setTasks", editResponseWithPagination(response));
         });
     },
     getSingleTask({ commit, state }, id) {
@@ -182,6 +187,17 @@ const actions = {
         commit("setDeleteTaskStatus", "");
     }
 };
+
+function editResponseWithPagination(response) {
+    if(response.data.data.next_page_url != null){
+        response.data.data.next_page_url = response.data.data.next_page_url.slice(-1);
+    }
+    if(response.data.data.prev_page_url !=null){
+        response.data.data.prev_page_url = response.data.data.prev_page_url.slice(-1);
+    }
+
+    return response;
+}
 
 export default {
     state,

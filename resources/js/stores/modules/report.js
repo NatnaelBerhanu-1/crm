@@ -74,13 +74,12 @@ const mutations = {
     }
 };
 const actions = {
-    getReports({ commit, state }, data = { url: "" }) {
-        if (data.url == "") {
-            data.url = "/api/reports?page=1";
-        }
-        Axios.get(data.url).then(response => {
+    getReports({ commit, state }, data = {page: 1}) {
+        var baseUrl = "/api/reports?page=";
+        var url = baseUrl + data.page;
+        Axios.get(url).then(response => {
             console.log(response.data);
-            commit("setReports", response);
+            commit("setReports", editResponseWithPagination(response));
         });
     },
     getSingleReport({ commit, state }, id) {
@@ -136,6 +135,7 @@ const actions = {
     updateReport({ commit, state }, data) {
         commit("setEditReportStatus", "busy");
         data._method = "PUT";
+        console.log(data);
         Axios.post(`/api/reports/${data.id}`, data)
             .then(response => {
                 console.log(response);
@@ -186,6 +186,21 @@ const actions = {
         commit("setDeleteReportStatus", "");
     }
 };
+
+function editResponseWithPagination(response) {
+    if (response.data.data.next_page_url != null) {
+        response.data.data.next_page_url = response.data.data.next_page_url.slice(
+            -1
+        );
+    }
+    if (response.data.data.prev_page_url != null) {
+        response.data.data.prev_page_url = response.data.data.prev_page_url.slice(
+            -1
+        );
+    }
+
+    return response;
+}
 
 export default {
     state,

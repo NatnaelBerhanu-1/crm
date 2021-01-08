@@ -6,7 +6,8 @@
         <span class="pl-2">Report</span>
       </p>
       <div class="flex flex-row">
-        <div v-on:click="showPrint = !showPrint"
+        <div
+          v-on:click="showPrint = !showPrint"
           class="bg-white border border-gray-300 cursor-pointer hover:bg-gray-300 hover:text-black h-8 text-black px-2 mr-2 rounded text-sm flex flex-row items-center"
         >
           <font-awesome-icon icon="print" size="sm" />
@@ -20,7 +21,11 @@
         </router-link>
       </div>
     </div>
-    <div v-on-clickaway="hidePrintModal" class="p-2 w-60 bg-white shadow-md border rounded-md radius-sm absolute right-52 top-32" v-if="showPrint">
+    <div
+      v-on-clickaway="hidePrintModal"
+      class="p-2 w-60 bg-white shadow-md border rounded-md radius-sm absolute right-52 top-32"
+      v-if="showPrint"
+    >
       <div class="text-center text-primary" v-if="printReportStatus == 'busy'">
         <font-awesome-icon icon="spinner" spin />
       </div>
@@ -90,6 +95,9 @@
           </tr>
         </tbody>
       </table>
+      <Pagination
+        :data="{prev_page_url:{page: reports.data.data.prev_page_url}, next_page_url:{page: reports.data.data.next_page_url}, cur_page:reports.data.data.current_page, total_page:reports.data.data.last_page, get: 'getReports'}"
+      ></Pagination>
     </div>
     <div v-else class="text-center text-primary">
       <font-awesome-icon icon="spinner" spin size="2x" />
@@ -98,19 +106,20 @@
 </template>
 <script>
 import Alert from "../components/Alert";
-import { mixin as clickaway } from 'vue-clickaway';
+import Pagination from "../components/Pagination";
+import { mixin as clickaway } from "vue-clickaway";
 
 export default {
-    mixins: [clickaway],
+  mixins: [clickaway],
   data: function () {
     return {
       from: "",
       to: "",
-      showPrint: false
+      showPrint: false,
     };
   },
   components: {
-    Alert,
+    Alert,Pagination
   },
   computed: {
     reports: function () {
@@ -134,16 +143,16 @@ export default {
     onClose: function () {
       this.$store.dispatch("resetDeleteReportStatus");
     },
-    printReport: function(e) {
-        e.preventDefault();
-        console.log({from: this.from, to: this.to});
-        this.$store.dispatch("getToPrint", {from: this.from, to: this.to});
+    printReport: function (e) {
+      e.preventDefault();
+      console.log({ from: this.from, to: this.to });
+      this.$store.dispatch("getToPrint", { from: this.from, to: this.to });
     },
-    hidePrintModal: function() {
-        if(this.showPrint){
-            this.showPrint = false;
-        }
-    }
+    hidePrintModal: function () {
+      if (this.showPrint) {
+        this.showPrint = false;
+      }
+    },
   },
 };
 </script>
