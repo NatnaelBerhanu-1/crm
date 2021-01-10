@@ -125,7 +125,7 @@
               <div>
                 <label for>Print Date</label>
                 <input
-                  type="datetime-local"
+                  type="datetime"
                   v-model="task.print_date"
                   id="print-date"
                   placeholder="Print Date"

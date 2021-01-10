@@ -159,7 +159,7 @@ const actions = {
     getCalendarTasks({ commit, state }) {
         return new Promise((resolve, reject) => {
             Axios.get("/api/tasks?groupBy=date").then(response => {
-                // console.log(response);
+                console.log(response);
                 response.data.data.forEach(element => {
 
                     element.display = 'list-item';

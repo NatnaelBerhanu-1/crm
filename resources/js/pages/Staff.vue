@@ -40,7 +40,7 @@
             <td>{{user.name}}</td>
             <td>{{user.phone_number}}</td>
             <td>{{user.role}}</td>
-            <td class="w-24 px-2">{{parseDate(user.created_at)}}</td>
+            <td class="w-64 px-2">{{parseDate(user.created_at)}}</td>
             <td class="text-gray-300">
               <router-link :to="`edit?id=${user.id}`" append>
                 <font-awesome-icon

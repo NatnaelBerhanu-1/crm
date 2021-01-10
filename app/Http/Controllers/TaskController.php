@@ -25,6 +25,7 @@ class TaskController extends Controller
                     $tasks = Task::whereDate('print_date',$request->query('date'))->get();
                 }else{
                     $tasks = Task::whereDate('shot_date',$request->query('date'))->get();
+                    // echo($tasks);
                 }
             }
             else if($request->query('groupBy')=='date'){

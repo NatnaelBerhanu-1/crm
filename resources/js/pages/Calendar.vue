@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <div class="page-container h-full flex flex-row">
-      <FullCalendar :options="calendarOptions" class="w-3/4" v-if="showCalendar" />
+      <FullCalendar :options="calendarOptions" class="w-full" v-if="showCalendar" />
       <div v-else class="text-center text-primary w-full">
         <font-awesome-icon icon="spinner" spin size="2x" />
       </div>
@@ -19,7 +19,7 @@
         <div v-else>
             <table class="w-full mt-2">
             <thead>
-                <tr class="text-black">
+                <tr class="text-black text-xs">
                 <th>Date</th>
                 <th>Name</th>
                 <th>Phone Number</th>
@@ -96,7 +96,11 @@ export default {
     handleEventClick: function (info) {
         this.showSelectedModal = true;
         this.gettingSelectedTasksStatus = 'busy';
-        Axios.get(`/api/tasks?filterBy=date&type=${info.event.extendedProps.type}&date=${info.event.start.toISOString().split('T')[0]}`).then(
+        var type = info.event.extendedProps.type;
+        var date = `${info.event.start.getFullYear()}-${Number(info.event.start.getMonth())+1}-${info.event.start.getDate()}`;
+        console.log(info.event.start.toUTCString());
+        console.log(info.event.start.toISOString());
+        Axios.get(`/api/tasks?filterBy=date&type=${info.event.extendedProps.type}&date=${date}`).then(
             response => {
                 console.log(response);
                 this.gettingSelectedTasksStatus = 'success';
@@ -122,5 +126,8 @@ export default {
 }
 .fc-event {
   cursor: default;
+}
+th{
+    @apply text-xs ;
 }
 </style>
