@@ -14,13 +14,13 @@
     </div>
     <Alert
       type="success"
-      message="Task Deleted Successfully"
+      message="Staff Deleted Successfully"
       :onClose="onClose"
       v-if="deleteUserStatus == 'success'"
     />
     <Alert
       type="failure"
-      message="Failed Deleting Task"
+      message="Failed Deleting Staff"
       v-else-if="deleteUserStatus == 'failure'"
       :onClose="onClose"
     />

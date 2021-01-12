@@ -46,13 +46,13 @@
 
     <Alert
       type="success"
-      message="Task Deleted Successfully"
+      message="Report Deleted Successfully"
       :onClose="onClose"
       v-if="deleteReportStatus == 'success'"
     />
     <Alert
       type="failure"
-      message="Failed Deleting Task"
+      message="Failed Deleting Report"
       v-else-if="deleteReportStatus == 'failure'"
       :onClose="onClose"
     />

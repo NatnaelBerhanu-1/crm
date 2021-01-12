@@ -6,13 +6,13 @@
     </p>
     <Alert
       type="success"
-      message="Task Updated Successfully"
+      message="Inventory Updated Successfully"
       :onClose="onClose"
       v-if="editItemStatus == 'success'"
     />
     <Alert
       type="failure"
-      message="Failed Updating task"
+      message="Failed Updating inventory"
       v-else-if="editItemStatus == 'failure'"
       :onClose="onClose"
     />

@@ -14,13 +14,13 @@
     </div>
     <Alert
       type="success"
-      message="Task Deleted Successfully"
+      message="Inventory Deleted Successfully"
       :onClose="onClose"
       v-if="deleteItemStatus == 'success'"
     />
     <Alert
       type="failure"
-      message="Failed Deleting Task"
+      message="Failed Deleting Inventory"
       v-else-if="deleteItemStatus == 'failure'"
       :onClose="onClose"
     />
@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     deleteItem: function (itemId) {
-      var resp = confirm("Do you want to delete this task?");
+      var resp = confirm("Do you want to delete this item?");
       if (resp) {
         this.$store.dispatch("deleteItem", itemId);
       }

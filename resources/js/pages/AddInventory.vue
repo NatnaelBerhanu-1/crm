@@ -6,13 +6,13 @@
     </p>
     <Alert
       type="success"
-      message="Task Added Successfully"
+      message="Inventory Added Successfully"
       :onClose="onClose"
       v-if="addItemStatus == 'success'"
     />
     <Alert
       type="failure"
-      message="Failed adding task"
+      message="Failed adding inventory"
       v-else-if="addItemStatus == 'failure'"
       :onClose="onClose"
     />
