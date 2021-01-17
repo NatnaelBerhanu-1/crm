@@ -138,18 +138,13 @@ export default {
     .form-control {
         @apply mt-2;
     }
-
-    .form-control label {
-        @apply font-medium;
-    }
-
     input:focus, select:focus, textarea:focus {
         outline: none;
         @apply border-primary;
     }
 
     label {
-        @apply text-sm;
+        @apply text-sm font-medium;
     }
 
     .page-container{

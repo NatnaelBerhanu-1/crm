@@ -20,15 +20,18 @@ class CreateTaskTable extends Migration
             $table->string('location');
             $table->string('type');
             $table->string('package');
-            $table->string('size');
+            $table->string('description');
             $table->string('quantity');
             $table->double('total_price');
             $table->double('paid_amount');
             $table->dateTime('shot_date');
-            $table->dateTime('print_date');
+            $table->dateTime('delivery_date');
             $table->string('status');
             $table->string('remark')->nullable();
             $table->integer('user_id');
+            $table->json('service');
+            $table->string('data_location');
+            $table->date('selection_date');
             $table->timestamps();
         });
     }

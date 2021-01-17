@@ -17,7 +17,7 @@
       :onClose="onClose"
     />
 
-    <form v-on:submit="editTask" method="post" v-if="task.status == 200">
+    <form v-on:submit="editTask" method="post" v-if="task.status == 200 && users.status == 200">
       <div class="pt-2 w-full">
         <div class="flex w-full flex-row gap-4">
           <div class="w-full">
@@ -72,6 +72,17 @@
               </select>
             </div>
             <div class="form-control">
+              <label >Service <span class="text-red-500" v-if="servicesError">this field is required</span></label>
+              <br />
+              <multiselect
+                v-model="task.data.data.service"
+                :options="services"
+                :multiple="true"
+                placeholder="Select Service"
+                :closeOnSelect="false"
+              ></multiselect>
+            </div>
+            <div class="form-control">
               <label>Package</label>
               <br />
               <select v-model="task.data.data.package" id="role" required>
@@ -82,14 +93,24 @@
               </select>
             </div>
             <div class="form-control">
-              <label>Size</label>
+              <label>Description</label>
               <br />
               <input
                 type="text"
-                v-model="task.data.data.size"
+                v-model="task.data.data.description"
                 id="full-name"
-                placeholder="Size"
+                placeholder="Description"
                 required
+              />
+            </div>
+            <div class="form-control">
+              <label>Data Location</label>
+              <br />
+              <input
+                type="text"
+                v-model="task.data.data.data_location"
+                id="data_location"
+                placeholder="Data Location"
               />
             </div>
           </div>
@@ -104,6 +125,20 @@
                 placeholder="Quantity"
                 required
               />
+            </div>
+            <div class="form-control">
+              <label for>Assign Staff <span class="text-red-500" v-if="staffError">this field is required</span></label>
+              <br />
+              <multiselect
+                v-model="task.data.data.staffs"
+                :options="users.data.data"
+                class="h-9 mt-1"
+                :multiple="true"
+                placeholder="Assign Staffs"
+                :closeOnSelect="false"
+                track-by="id"
+                label="name"
+              ></multiselect>
             </div>
             <div class="form-control flex flex-row justify-between content-between w-full gap-4">
               <div class="w-full">
@@ -127,6 +162,11 @@
                 />
               </div>
             </div>
+            <div class="form-control">
+              <label>Selection Date</label>
+              <br />
+              <input type="date" v-model="task.data.data.selection_date" id="selection_date" required />
+            </div>
             <div class="form-control flex flex-row justify-between content-between w-full gap-4">
               <div>
                 <label for>Shot Date</label>
@@ -139,12 +179,12 @@
                 />
               </div>
               <div>
-                <label for>Print Date</label>
+                <label for>Delivery Date</label>
                 <input
                   type="datetime-local"
-                  v-model="print_date"
-                  id="print-date"
-                  placeholder="Print Date"
+                  v-model="delivery_date"
+                  id="delivery-date"
+                  placeholder="Delivery Date"
                   required
                 />
               </div>
@@ -191,23 +231,32 @@
 </template>
 <script>
 import Alert from "../components/Alert";
+import multiselect from "vue-multiselect";
 
 export default {
   components: {
-    Alert,
+    Alert, multiselect
   },
   data: function () {
     return {
-        phoneNumberError: false
+        phoneNumberError: false,
+        servicesError: false,
+        staffError: false
     };
   },
   computed: {
+    users: function () {
+      return this.$store.getters.users;
+    },
     editTaskStatus: function () {
       console.log(this.$store.getters.addTaskStatus);
       return this.$store.getters.editTaskStatus;
     },
     task: function () {
       return this.$store.getters.editTask;
+    },
+    services: function() {
+        return this.$store.getters.services;
     },
     shot_date: {
       get() {
@@ -217,12 +266,12 @@ export default {
         this.task.data.data.shot_date = newDate;
       },
     },
-    print_date: {
+    delivery_date: {
       get() {
-        return this.parseDateTime(this.task.data.data.print_date);
+        return this.parseDateTime(this.task.data.data.delivery_date);
       },
       set(newDate) {
-        this.task.data.data.print_date = newDate;
+        this.task.data.data.delivery_date = newDate;
       },
     },
   },
@@ -231,9 +280,25 @@ export default {
       e.preventDefault();
       console.log(this.task);
       var phoneno = /^\d{10}$/;
-      if (this.task.data.data.phone_number.match(phoneno)) {
+      if (this.task.data.data.service.length == 0 || this.task.data.data.staffs.length == 0){
+          if(this.task.data.data.service.length == 0) this.servicesError = true;
+          if(this.task.data.data.staffs.length == 0) this.staffError = true;
+          alert("fill all the required fields");
+          return;
+      }
+      this.servicesError = false;
+      this.staffError = false;
+      if (this.task.data.data.phone_number.match(phoneno)){
         this.phoneNumberError = false;
-        this.$store.dispatch("updateTask", this.task.data.data);
+        var staffs = [];
+        this.task.data.data.staffs.forEach(staff => {
+            staffs.push(staff.id);
+        });
+        var data = Object.assign({}, this.task.data.data);
+        data.staffs = staffs;
+        console.log(data);
+        console.log(this.task.data.data);
+        this.$store.dispatch("updateTask", data);
       } else {
         this.phoneNumberError = true;
       }
@@ -249,12 +314,13 @@ export default {
   created: function () {
     this.$store.dispatch("resetEditTaskStatus");
     this.$store.dispatch("getSingleTask", this.$route.query.id);
+    this.$store.dispatch("getUsers", {only: "staff"});
   },
 };
 </script>
 <style scoped>
 .form-control {
-  @apply w-full;
+  @apply w-full h-20;
 }
 .form-control input,
 .form-control select {

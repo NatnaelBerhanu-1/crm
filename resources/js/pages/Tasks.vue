@@ -50,13 +50,13 @@
               <th>Type</th>
               <th>Location</th>
               <th>Package</th>
-              <th>Size</th>
+              <th>Description</th>
               <th>Quantity</th>
               <th>Total Price</th>
               <th>Paid Amount</th>
               <th>Unpaid</th>
               <th>Shot Date</th>
-              <th>Print Date</th>
+              <th>Delivery Date</th>
               <th class="w-20"></th>
             </tr>
           </thead>
@@ -71,13 +71,13 @@
               <td>{{task.type}}</td>
               <td>{{task.location}}</td>
               <td>{{task.package}}</td>
-              <td>{{task.size}}</td>
+              <td>{{task.description}}</td>
               <td>{{task.quantity}}</td>
               <td>{{task.total_price}}</td>
               <td>{{task.paid_amount}}</td>
               <td>{{task.total_price - task.paid_amount}}</td>
               <td class="w-20">{{parseDate(task.shot_date)}}</td>
-              <td class="w-20">{{parseDate(task.print_date)}}</td>
+              <td class="w-20">{{parseDate(task.delivery_date)}}</td>
               <td class="text-gray-300">
                 <router-link :to="`edit?id=${task.id}`" append>
                   <font-awesome-icon
