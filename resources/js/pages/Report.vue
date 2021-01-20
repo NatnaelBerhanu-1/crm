@@ -32,7 +32,7 @@
         </router-link>
       </div>
     </div>
-    <line-chart class="py-2 h-96 border w-full my-4" :chartData="data" v-if="dataloaded" />
+    <line-chart class="py-2 h-96 border w-full my-8" :chartData="data" v-if="dataloaded" />
     <div v-else class="h-96">
 
     </div>
