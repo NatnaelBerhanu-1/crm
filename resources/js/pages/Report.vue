@@ -7,6 +7,17 @@
       </p>
       <div class="flex flex-row">
         <div
+          v-on-clickaway="hideFilterModal"
+          @click="showFilter = !showFilter"
+          class="bg-white border border-gray-300 cursor-pointer hover:bg-gray-300 hover:text-black h-8 text-black px-2 mr-2 rounded text-sm flex flex-row items-center relative"
+        >
+          <font-awesome-icon icon="filter" size="sm" />
+          <span class="pl-2">Filter</span>
+          <div v-if="showFilter" class="absolute top-8">
+            <FilterDropDown :onFilterClicked="onFilterClicked" />
+          </div>
+        </div>
+        <div
           v-on:click="showPrint = !showPrint"
           class="bg-white border border-gray-300 cursor-pointer hover:bg-gray-300 hover:text-black h-8 text-black px-2 mr-2 rounded text-sm flex flex-row items-center"
         >
@@ -20,6 +31,10 @@
           </div>
         </router-link>
       </div>
+    </div>
+    <line-chart class="py-2 h-96 border w-full my-8" :chartData="data" v-if="dataloaded" />
+    <div v-else class="h-96">
+
     </div>
     <div
       v-on-clickaway="hidePrintModal"
@@ -108,6 +123,9 @@
 import Alert from "../components/Alert";
 import Pagination from "../components/Pagination";
 import { mixin as clickaway } from "vue-clickaway";
+import LineChart from "../components/ReportGraph.vue";
+import FilterDropDown from "../components/FilterDropdown";
+import Axios from "axios";
 
 export default {
   mixins: [clickaway],
@@ -116,10 +134,16 @@ export default {
       from: "",
       to: "",
       showPrint: false,
+      showFilter: false,
+      data: null,
+      dataloaded: false
     };
   },
   components: {
-    Alert,Pagination
+    Alert,
+    Pagination,
+    LineChart,
+    FilterDropDown,
   },
   computed: {
     reports: function () {
@@ -134,8 +158,42 @@ export default {
   },
   created: function () {
     this.$store.dispatch("getReports");
+      this.getGraphData('overall');
+
   },
   methods: {
+    getGraphData: function (filterBy) {
+      Axios.get(
+        `/api/reports?forGraph=true&filterBy=${filterBy.toLowerCase()}`
+      ).then((response) => {
+        console.log(response);
+        var data = [];
+        var label = [];
+        if (response.status == 200) {
+          response.data.forEach((element) => {
+            data.push(element.data);
+            label.push(element.label);
+          });
+          this.data = {
+            //Data to be represented on x-axis
+            labels: label,
+            datasets: [
+              {
+                label: filterBy.toLowerCase(),
+                backgroundColor: "#00000000",
+                pointRadius: 0,
+                borderWidth: 2,
+                borderColor: "#3D68FF",
+                backgroundColor: "#3D68FF10",
+                //Data to be represented on y-axis
+                data: data,
+              },
+            ],
+          };
+          this.dataloaded = true;
+        }
+      });
+    },
     deleteReport: function (reportId) {
       var resp = confirm("Do you want to remove this report?");
       if (resp) this.$store.dispatch("deleteReport", reportId);
@@ -152,6 +210,15 @@ export default {
       if (this.showPrint) {
         this.showPrint = false;
       }
+    },
+    hideFilterModal: function () {
+      if (this.showFilter) {
+        this.showFilter = false;
+      }
+    },
+    onFilterClicked: function (filterBy) {
+      console.log(filterBy);
+      this.getGraphData(filterBy);
     },
   },
 };

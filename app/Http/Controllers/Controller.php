@@ -17,6 +17,6 @@ class Controller extends BaseController
             'data'=>$data,
             'message'=>$message
         ];
-        return response(json_encode($data), $statusCode);
+        return response(json_encode($data), $statusCode)->header('Content-type', 'text/json');
     }
 }

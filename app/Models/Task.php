@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\StaffTask;
 
 class Task extends Model
 {
@@ -17,13 +19,20 @@ class Task extends Model
         'total_price',
         'paid_amount',
         'shot_date',
-        'print_date',
+        'delivery_date',
         'user_id',
         'type',
         'package',
-        'size',
+        'description',
         'quantity',
         'status',
-        'remark'
+        'remark',
+        'service',
+        'data_location',
+        'selection_date',
     ];
+
+    public function staffs(){
+        return $this->belongsToMany(User::class, 'staff_tasks', 'task_id', 'staff_id');
+    }
 }

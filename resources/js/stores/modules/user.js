@@ -88,8 +88,15 @@ const mutations = {
     }
 };
 const actions = {
-    getUsers({ commit, state }) {
-        Axios.get("/api/users").then(response => {
+    getUsers({ commit, state }, data = null) {
+        var url = "/api/users";
+        if(data != null){
+            if(data.only == "staff"){
+            url = url + "?only=staff"
+        }
+        }
+
+        Axios.get(url).then(response => {
             console.log(response.data);
             commit("setUsers", response);
         });

@@ -1,5 +1,5 @@
 import Axios from "axios";
-
+import router from "../../routes";
 // initial state
 const state = () => ({
     addTaskStatus: "",
@@ -12,10 +12,19 @@ const state = () => ({
         user_id: 1,
         type: "",
         package: "",
-        status: ""
+        status: "",
+        staffs: []
     },
     calendarTasks: [],
-    initData: {}
+    initData: {},
+    staffValues: null,
+    services: [
+        "Photoshoot",
+        "Video shoot",
+        "Documentary",
+        "VIP Request",
+        "Others"
+    ]
 });
 
 //getters
@@ -43,6 +52,12 @@ const getters = {
     },
     initData: (state, getters) => {
         return state.initData;
+    },
+    staffValues: (state, getters) => {
+        return state.staffValues;
+    },
+    services: (state, getters) => {
+        return state.services;
     }
 };
 const mutations = {
@@ -76,14 +91,17 @@ const mutations = {
     },
     setInitData(state, payload) {
         state.initData = payload;
+    },
+    setStaffValues(state, payload) {
+        state.staffValues = payload;
     }
 };
 const actions = {
-    getTasks({ commit, state }, data = {page: 1, search: null}) {
-        var baseUrl = '/api/tasks?page=';
-        var url = baseUrl+ data.page;
-        if(data.search!=null){
-            url = url +  `&search=${data.search}`
+    getTasks({ commit, state }, data = { page: 1, search: null }) {
+        var baseUrl = "/api/tasks?page=";
+        var url = baseUrl + data.page;
+        if (data.search != null) {
+            url = url + `&search=${data.search}`;
         }
         console.log(url);
         console.log(data.search);
@@ -96,31 +114,35 @@ const actions = {
     getSingleTask({ commit, state }, id) {
         Axios.get(`/api/tasks/${id}`).then(response => {
             console.log(response);
+            response.data.data.service = JSON.parse(response.data.data.service);
             commit("setEditTask", response);
         });
     },
     addTask({ commit, state }, data) {
         commit("setAddTaskStatus", "busy");
-        Axios.post("/api/tasks", data)
-            .then(response => {
-                console.log(response);
-                if (response.status == 201) {
-                    commit("setAddTaskStatus", "success");
-                    commit("setAddTask", {
-                        location: "",
-                        user_id: 1,
-                        type: "",
-                        package: "",
-                        status: ""
-                    });
-                } else {
+        return new Promise((resolve, reject) => {
+            Axios.post("/api/tasks", data)
+                .then(response => {
+                    console.log(response);
+                    if (response.status == 201) {
+                        resolve();
+                        commit("setAddTaskStatus", "success");
+                        commit("setAddTask", {
+                            location: "",
+                            user_id: 1,
+                            type: "",
+                            package: "",
+                            status: ""
+                        });
+                    } else {
+                        commit("setAddTaskStatus", "failure");
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
                     commit("setAddTaskStatus", "failure");
-                }
-            })
-            .catch(error => {
-                console.log(error);
-                commit("setAddTaskStatus", "failure");
-            });
+                });
+        });
     },
     updateTask({ commit, state }, data) {
         commit("setEditTaskStatus", "busy");
@@ -161,13 +183,12 @@ const actions = {
             Axios.get("/api/tasks?groupBy=date").then(response => {
                 console.log(response);
                 response.data.data.forEach(element => {
-
-                    element.display = 'list-item';
-                    if(element.type == 'print'){
-                    element.backgroundColor = '#ff0000';
-                        element.title = element.title + ' Printing';
-                    }else{
-                        element.title = element.title + ' Photo Shoot';
+                    element.display = "list-item";
+                    if (element.type == "print") {
+                        element.backgroundColor = "#ff0000";
+                        element.title = element.title + " Printing";
+                    } else {
+                        element.title = element.title + " Photo Shoot";
                     }
                 });
                 commit("setCalendarTasks", response.data.data);
@@ -187,30 +208,39 @@ const actions = {
             user_id: 1,
             type: "",
             package: "",
-            status: ""
+            status: "",
+            staffs: []
         });
+        commit("setStaffValues", null);
     },
     resetDeleteTaskStatus({ commit, state }) {
         commit("setDeleteTaskStatus", "");
     },
-    getInitData({commit, state}) {
-        Axios.get('/api/init').then(response=> {
-            console.log(response);
-            if(response.status == 200)
-            commit("setInitData", response);
-        })
-        .catch(error => {
-            console.log(error.response);
-        })
+    getInitData({ commit, state }) {
+        Axios.get("/api/init")
+            .then(response => {
+                console.log(response);
+                if (response.status == 200) commit("setInitData", response);
+            })
+            .catch(error => {
+                console.log(error.response);
+            });
+    },
+    setSfaffValue({ commit, state }, value) {
+        commit("setStaffValues", value);
     }
 };
 
 function editResponseWithPagination(response) {
-    if(response.data.data.next_page_url != null){
-        response.data.data.next_page_url = response.data.data.next_page_url.slice(-1);
+    if (response.data.data.next_page_url != null) {
+        response.data.data.next_page_url = response.data.data.next_page_url.slice(
+            -1
+        );
     }
-    if(response.data.data.prev_page_url !=null){
-        response.data.data.prev_page_url = response.data.data.prev_page_url.slice(-1);
+    if (response.data.data.prev_page_url != null) {
+        response.data.data.prev_page_url = response.data.data.prev_page_url.slice(
+            -1
+        );
     }
 
     return response;

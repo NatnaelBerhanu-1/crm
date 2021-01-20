@@ -1,5 +1,37 @@
 <template>
   <div>
+    <div
+      class="absolute w-full h-screen flex justify-items-center justify-center left-0 top-0 z-50 bg-black bg-opacity-60 p-12"
+      v-if="showModal"
+    >
+      <div class="p-8 bg-white rounded-md h-min w-max">
+        <div class="h-8 flex h-min gap-4 w-full justify-between content-center">
+          <p class="text-primary font-bold">Detail</p>
+          <font-awesome-icon icon="times" class="cursor-pointer" @click="showModal = false" />
+        </div>
+        <div class="pt-6 text-black gap-16 flex justify-center">
+          <div>
+            <ModalData title="Full Name" :content="detailTask.name" />
+            <ModalData title="Phone Number" :content="detailTask.phone_number" />
+            <ModalData title="Type" :content="detailTask.type" />
+            <ModalData title="Location" :content="detailTask.location" />
+            <ModalData title="Package" :content="detailTask.package" />
+          </div>
+          <div>
+            <ModalData title="Description" :content="detailTask.description" />
+            <ModalData title="Quantity" :content="detailTask.quantity" />
+            <ModalData title="Total Price" :content="detailTask.total_price" />
+            <ModalData title="Paid Amount" :content="detailTask.paid_amount" />
+            <ModalData title="Unpaid" :content="detailTask.total_price - detailTask.paid_amount" />
+          </div>
+          <div>
+            <ModalData title="Selection Date" :content="detailTask.selection_date" />
+            <ModalData title="Shot Date" :content="detailTask.shot_date" />
+            <ModalData title="Delivery Date" :content="detailTask.delivery_date" />
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="page-container">
       <div class="flex flex-row justify-between">
         <div class="flex flex-row content-center">
@@ -14,7 +46,8 @@
               class="mt-0 border-gray-400 w-60 h-7"
               placeholder="Search.."
             />
-            <button @click="search"
+            <button
+              @click="search"
               class="bg-white ml-2 h-8 text-gray-500 px-2 border-gray-400 border rounded text-sm hover:bg-primary hover:text-white"
             >
               <font-awesome-icon icon="search" size="sm" class="mr-2" />Search
@@ -44,19 +77,14 @@
         <table class="w-full">
           <thead>
             <tr class="text-black">
-              <th>Date</th>
               <th>Name</th>
               <th>Phone Number</th>
               <th>Type</th>
               <th>Location</th>
               <th>Package</th>
-              <th>Size</th>
+              <th>Description</th>
               <th>Quantity</th>
               <th>Total Price</th>
-              <th>Paid Amount</th>
-              <th>Unpaid</th>
-              <th>Shot Date</th>
-              <th>Print Date</th>
               <th class="w-20"></th>
             </tr>
           </thead>
@@ -64,20 +92,15 @@
             <tr v-if="tasks.data.data.data.length == 0">
               <td colspan="13" class="text-gray-500 text-lg">No tasks</td>
             </tr>
-            <tr v-for="task in tasks.data.data.data" :key="task.id">
-              <td class="w-20">{{parseDate(task.created_at)}}</td>
+            <tr v-for="task in tasks.data.data.data" :key="task.id" @click="rowClicked(task)">
               <td>{{task.name}}</td>
               <td>{{task.phone_number}}</td>
               <td>{{task.type}}</td>
               <td>{{task.location}}</td>
               <td>{{task.package}}</td>
-              <td>{{task.size}}</td>
+              <td>{{task.description}}</td>
               <td>{{task.quantity}}</td>
               <td>{{task.total_price}}</td>
-              <td>{{task.paid_amount}}</td>
-              <td>{{task.total_price - task.paid_amount}}</td>
-              <td class="w-20">{{parseDate(task.shot_date)}}</td>
-              <td class="w-20">{{parseDate(task.print_date)}}</td>
               <td class="text-gray-300">
                 <router-link :to="`edit?id=${task.id}`" append>
                   <font-awesome-icon
@@ -94,7 +117,9 @@
             </tr>
           </tbody>
         </table>
-        <Pagination :data="{prev_page_url:{page: tasks.data.data.prev_page_url, search: searchVal}, next_page_url:{page:tasks.data.data.next_page_url, search: searchVal}, cur_page:tasks.data.data.current_page, total_page:tasks.data.data.last_page, get: 'getTasks'}"></Pagination>
+        <Pagination
+          :data="{prev_page_url:{page: tasks.data.data.prev_page_url, search: searchVal}, next_page_url:{page:tasks.data.data.next_page_url, search: searchVal}, cur_page:tasks.data.data.current_page, total_page:tasks.data.data.last_page, get: 'getTasks'}"
+        ></Pagination>
       </div>
       <div v-else class="text-center text-primary">
         <font-awesome-icon icon="spinner" spin size="2x" />
@@ -112,25 +137,28 @@ th {
   @apply mt-0;
 }
 
-.input{
-    @apply w-60;
+.input {
+  @apply w-60;
 }
 table,
 th,
 td {
-  @apply text-xs;
+  @apply text-sm;
 }
 </style>
 <script>
 import Alert from "../components/Alert";
 import Pagination from "../components/Pagination";
+import ModalData from "../components/ModalData";
 
 export default {
-    data: function(){
-        return {
-            searchVal: null
-        }
-    },
+  data: function () {
+    return {
+      searchVal: null,
+      showModal: false,
+      detailTask: {},
+    };
+  },
   computed: {
     tasks: function () {
       return this.$store.getters.tasks;
@@ -143,9 +171,15 @@ export default {
     this.$store.dispatch("getTasks");
   },
   components: {
-    Alert,Pagination
+    Alert,
+    Pagination,
+    ModalData,
   },
   methods: {
+    rowClicked: function (data) {
+      this.detailTask = data;
+      this.showModal = true;
+    },
     parseDate: function (rawdate) {
       console.log(rawdate);
       var date = new Date(rawdate);
@@ -158,8 +192,8 @@ export default {
         this.$store.dispatch("deleteTask", taskId);
       }
     },
-    search: function(){
-        this.$store.dispatch("getTasks", {page: 1, search: this.searchVal});
+    search: function () {
+      this.$store.dispatch("getTasks", { page: 1, search: this.searchVal });
     },
     onClose: function (e) {
       this.$store.dispatch("resetDeleteTaskStatus");

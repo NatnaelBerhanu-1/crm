@@ -8,44 +8,39 @@
     props: {
         color: String,
         data: Array,
+        labels: Array,
         label: String
     },
     data () {
       return {
         datacollection: {
           //Data to be represented on x-axis
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+          labels: this.labels,
           datasets: [
             {
               label: this.label,
-              backgroundColor: this.color,
+              backgroundColor: "#00000000",
               pointRadius: 0,
               borderWidth: 2,
               borderColor: "#3D68FF",
+              backgroundColor: "#3D68FF10",
               //Data to be represented on y-axis
               data: this.data
-            }
-          ]
+            },
+          ],
+
         },
         //Chart.js options that controls the appearance of the chart
         options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              },
-              gridLines: {
-                display: false
-              }
-            }],
-            xAxes: [ {
-              gridLines: {
-                display: false
-              }
-            }]
-          },
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: [{
+                ticks: {
+                    display: false //this will remove only the label
+                }
+            }]
+        }
         }
       }
     },

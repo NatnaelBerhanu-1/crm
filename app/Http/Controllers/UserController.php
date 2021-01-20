@@ -16,10 +16,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $users = User::all();
+            if ($request->query('only')=='staff') {
+                $users = User::where('role', 'staff')->get();
+            }else{
+                $users = User::all();
+            }
             return $this->sendResponse(200, $users, 'Resource fetched successfully');
         } catch (Exception $e) {
             // echo($e);

@@ -4,13 +4,13 @@
             <div class="col-span-3 row-span-2">
                 <p class="text-lg">Monthly Earning</p>
                 <div class="mt-2 bg-white h-52 shadow-sm">
-                    <line-chart class="w-full h-full" color="#FFE0E6" :data="formatForGraph(initData.data.data.monthlyEarning)" label="Monthly earning"></line-chart>
+                    <line-chart :labels="monthlyLabel" class="w-full h-full" color="#FFE0E6" :data="formatForGraph(initData.data.data.monthlyEarning)" label="Monthly earning"></line-chart>
                 </div>
             </div>
             <div class="col-span-3 row-span-2">
                 <p class="text-lg">Monthly Tasks</p>
                 <div class="mt-2 bg-white h-52 shadow-sm">
-                    <line-chart class="w-full h-full" color="#CDEBFF" :data="formatForGraph(initData.data.data.monthlyTasks)" label="Monthly tasks"></line-chart>
+                    <line-chart class="w-full h-full" :labels="monthlyLabel" color="#CDEBFF" :data="formatForGraph(initData.data.data.monthlyTasks)" label="Monthly tasks"></line-chart>
                 </div>
             </div>
             <div class="col-span-2 row-span-2">
@@ -74,6 +74,11 @@
 import LineChart from '../components/LineChart.vue';
 export default {
     components: {LineChart},
+    data: function() {
+        return {
+            monthlyLabel: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+        }
+    },
     computed: {
         initData: function() {
             return this.$store.getters.initData;
@@ -138,18 +143,13 @@ export default {
     .form-control {
         @apply mt-2;
     }
-
-    .form-control label {
-        @apply font-medium;
-    }
-
     input:focus, select:focus, textarea:focus {
         outline: none;
         @apply border-primary;
     }
 
     label {
-        @apply text-sm;
+        @apply text-sm font-medium;
     }
 
     .page-container{
