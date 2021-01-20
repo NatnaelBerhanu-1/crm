@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -16,6 +18,27 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         try {
+            if ($request->query('forGraph') != null){
+                $filterBy = $request->query('filterBy');
+                if($filterBy == "overall"){
+                    $reports = Report::select(DB::raw('sum(income_amount) as data'), 'date as label')->groupBy('date')->orderBy('label')->get();
+                    echo($reports);
+                }else if($filterBy == "thisyear"){
+                    $reports = Report::select(DB::raw('sum(income_amount) as data'), 'date as label')->groupBy('date')->whereYear('date', date('Y'))->orderBy('label')->get();
+                    echo($reports);
+                }else if($filterBy == "last6months"){
+                    $reports = DB::table('reports')->select(DB::raw('sum(income_amount) as data, date as label'))->groupBy('date')->whereRaw('current_date - date < 180')->orderBy('label')->get();
+                    echo($reports);
+                }else if($filterBy == "thismonth"){
+                    $reports = Report::select(DB::raw('sum(income_amount) as data'), 'date as label')->groupBy('date')->whereYear('date', date('Y'))->wheremonth('date', date('m'))->orderBy('label')->get();
+                    echo($reports);
+                }
+                else if($filterBy == "lastmonth"){
+                    $reports = Report::select(DB::raw('sum(income_amount) as data'), 'date as label')->groupBy('date')->wheremonth('date', '=', Carbon::now()->subMonth()->month)->orderBy('label')->get();
+                    echo($reports);
+                }
+                return;
+            }
             if ($request->query('from') != null && $request->query('to') != null) {
                 $from = $request->query('from');
                 $to = $request->query('to');

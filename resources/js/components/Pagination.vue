@@ -25,6 +25,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+button:disabled {
+    cursor: not-allowed;
+}
 
 </style>

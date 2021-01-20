@@ -58,7 +58,7 @@
         </tbody>
       </table>
       <div class="text-center text-primary" v-else>
-        <font-awesome-icon icon="spinner" spin />
+        <font-awesome-icon icon="spinner" spin size="2x" />
       </div>
     </div>
   </div>

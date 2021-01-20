@@ -65,10 +65,10 @@
               </select>
             </div>
             <div class="form-control">
-              <label >Service <span class="text-red-500" v-if="task.services==null">this field is required</span></label>
+              <label >Service <span class="text-red-500" v-if="task.service==null">this field is required</span></label>
               <br />
               <multiselect
-                v-model="task.services"
+                v-model="task.service"
                 :options="services"
                 :multiple="true"
                 placeholder="Select Service"
@@ -262,7 +262,7 @@ export default {
       console.log(this.value);
       e.preventDefault();
       var phoneno = /^\d{10}$/;
-      if (this.staffValues==null || this.task.services == null){
+      if (this.staffValues==null || this.task.service == null){
           alert("fill all the required fields");
           return;
       }
