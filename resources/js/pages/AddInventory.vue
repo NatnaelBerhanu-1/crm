@@ -111,5 +111,8 @@ export default {
       this.$store.dispatch("resetAddItemStatus");
     },
   },
+  created: function() {
+      this.$store.dispatch("resetAddItemStatus");
+  }
 };
 </script>

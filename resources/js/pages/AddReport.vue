@@ -122,5 +122,8 @@ export default {
       this.$store.dispatch("resetAddReportStatus");
     },
   },
+  created: function(){
+      this.$store.dispatch("resetAddReportStatus");
+  }
 };
 </script>

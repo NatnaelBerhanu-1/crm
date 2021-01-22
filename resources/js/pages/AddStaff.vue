@@ -100,6 +100,9 @@ export default {
       this.$store.dispatch("resetAddUserStatus");
     },
   },
+  created: function(){
+      this.$store.dispatch("resetAddUserStatus");
+  }
 };
 </script>
 <style scoped>

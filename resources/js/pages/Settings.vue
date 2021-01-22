@@ -18,8 +18,12 @@
     />
     <div class="mt-2">
       <div class="flex flex-row justify-between w-96">
-          <p class="mb-2">Change Password</p>
-          <font-awesome-icon class="text-primary" :icon="!showPassword ? 'eye':'eye-slash'" @click="showPassword=!showPassword"/>
+        <p class="mb-2">Change Password</p>
+        <font-awesome-icon
+          class="text-primary"
+          :icon="!showPassword ? 'eye':'eye-slash'"
+          @click="showPassword=!showPassword"
+        />
       </div>
       <div class="px-2 pb-2 w-96 border">
         <form @submit.prevent="changePassword">
@@ -97,7 +101,7 @@ export default {
       confirmPasswordError: false,
       newPasswordError: false,
       npe: "",
-      showPassword: false
+      showPassword: false,
     };
   },
   computed: {
@@ -135,6 +139,9 @@ export default {
     onClose: function () {
       this.$store.dispatch("resetChangePasswordStatus");
     },
+  },
+  created: function () {
+    this.$store.dispatch("resetChangePasswordStatus");
   },
 };
 </script>

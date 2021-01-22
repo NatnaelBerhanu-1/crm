@@ -168,6 +168,7 @@ export default {
     },
   },
   created: function () {
+    this.$store.dispatch("resetDeleteTaskStatus");
     this.$store.dispatch("getTasks");
   },
   components: {

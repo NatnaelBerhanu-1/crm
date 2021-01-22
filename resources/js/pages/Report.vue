@@ -33,9 +33,7 @@
       </div>
     </div>
     <line-chart class="py-2 h-96 border w-full my-8" :chartData="data" v-if="dataloaded" />
-    <div v-else class="h-96">
-
-    </div>
+    <div v-else class="h-96"></div>
     <div
       v-on-clickaway="hidePrintModal"
       class="p-2 w-60 bg-white shadow-md border rounded-md radius-sm absolute right-52 top-32"
@@ -136,7 +134,7 @@ export default {
       showPrint: false,
       showFilter: false,
       data: null,
-      dataloaded: false
+      dataloaded: false,
     };
   },
   components: {
@@ -157,9 +155,9 @@ export default {
     },
   },
   created: function () {
+    this.$store.dispatch("resetDeleteReportStatus");
     this.$store.dispatch("getReports");
-      this.getGraphData('overall');
-
+    this.getGraphData("overall");
   },
   methods: {
     getGraphData: function (filterBy) {

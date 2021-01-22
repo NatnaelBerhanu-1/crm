@@ -79,6 +79,7 @@ export default {
     },
   },
   created: function () {
+    this.$store.dispatch("resetDeleteUserStatus");
     this.$store.dispatch("getUsers");
   },
   methods: {

@@ -85,7 +85,8 @@ import Pagination from "../components/Pagination";
 
 export default {
   components: {
-    Alert,Pagination
+    Alert,
+    Pagination,
   },
   mixins: [helperMixin],
   computed: {
@@ -108,6 +109,7 @@ export default {
     },
   },
   created: function () {
+    this.$store.dispatch("resetDeleteItemStatus");
     this.$store.dispatch("getItems");
   },
 };
