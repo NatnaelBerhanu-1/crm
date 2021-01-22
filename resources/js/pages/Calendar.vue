@@ -52,7 +52,7 @@
                 <td>{{task.paid_amount}}</td>
                 <td>{{task.total_price - task.paid_amount}}</td>
                 <td class="w-20">{{parseDate(task.shot_date)}}</td>
-                <td class="w-20">{{parseDate(task.print_date)}}</td>
+                <td class="w-20">{{parseDate(task.delivery_date)}}</td>
                 </tr>
             </tbody>
             </table>

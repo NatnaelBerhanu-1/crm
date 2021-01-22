@@ -62,7 +62,7 @@
                             <td>{{task.type}}</td>
                             <td>{{task.location}}</td>
                             <td>{{task.shot_date}}</td>
-                            <td>{{task.print_date}}</td>
+                            <td>{{task.delivery_date}}</td>
                         </tr>
                     </tbody>
                 </table>

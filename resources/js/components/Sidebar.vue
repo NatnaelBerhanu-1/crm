@@ -4,37 +4,37 @@
         <ul class="p-0 mt-6">
             <li v-if="isAdmin">
                 <router-link to="/dashboard">
-                    <SideBarItem v-bind:icon="['fas', 'tachometer-alt']" title="Dashboard" :active="currentRoute=='/dashboard'"></SideBarItem>
+                    <SideBarItem v-bind:icon="['fas', 'tachometer-alt']" title="Dashboard" :active="currentRoute.indexOf('dashboard')!=-1"></SideBarItem>
                 </router-link>
             </li>
             <li v-if="isAdmin">
                 <router-link to="/staff">
-                    <SideBarItem v-bind:icon="['fas', 'id-card']" title="Staff" :active="currentRoute=='/staff'"></SideBarItem>
+                    <SideBarItem v-bind:icon="['fas', 'id-card']" title="Staff" :active="currentRoute.indexOf('staff')!=-1"></SideBarItem>
                 </router-link>
             </li>
             <li v-if="isAdmin">
                 <router-link to="/tasks">
-                    <SideBarItem v-bind:icon="['fas', 'tasks']" title="Tasks" :active="currentRoute=='/tasks'"></SideBarItem>
+                    <SideBarItem v-bind:icon="['fas', 'tasks']" title="Tasks" :active="currentRoute.indexOf('tasks')!=-1"></SideBarItem>
                 </router-link>
             </li>
             <li v-if="isAdmin">
                 <router-link to="/inventory">
-                    <SideBarItem v-bind:icon="['fas', 'camera']" title="Inventory" :active="currentRoute=='/inventory'"></SideBarItem>
+                    <SideBarItem v-bind:icon="['fas', 'camera']" title="Inventory" :active="currentRoute.indexOf('inventory')!=-1"></SideBarItem>
                 </router-link>
             </li>
             <li>
                 <router-link to="/calendar">
-                    <SideBarItem v-bind:icon="['fas', 'calendar-alt']" title="Calendar" :active="currentRoute=='/calendar'"></SideBarItem>
+                    <SideBarItem v-bind:icon="['fas', 'calendar-alt']" title="Calendar" :active="currentRoute.indexOf('calendar')!=-1"></SideBarItem>
                 </router-link>
             </li>
             <li v-if="isAdmin">
                 <router-link to="/report">
-                    <SideBarItem v-bind:icon="['fas', 'chart-line']" title="Report" :active="currentRoute=='/report'"></SideBarItem>
+                    <SideBarItem v-bind:icon="['fas', 'chart-line']" title="Report" :active="currentRoute.indexOf('report')!=-1"></SideBarItem>
                 </router-link>
             </li>
             <li>
                  <router-link to="/settings">
-                    <SideBarItem v-bind:icon="['fas', 'cog']" title="Settings" :active="currentRoute=='/settings'"></SideBarItem>
+                    <SideBarItem v-bind:icon="['fas', 'cog']" title="Settings" :active="currentRoute.indexOf('settings')!=-1"></SideBarItem>
                 </router-link>
             </li>
         </ul>

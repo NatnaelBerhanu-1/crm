@@ -68,7 +68,7 @@ const mutations = {
         state.addUser = payload;
     },
     removeUserById(state, id) {
-        state.users.data.data.data = state.users.data.data.data.filter(function(
+        state.users.data.data = state.users.data.data.filter(function(
             element
         ) {
             return element.id != id;

@@ -87,6 +87,9 @@ export default {
       if (resp) this.$store.dispatch("deleteUser", userId);
       console.log(userId);
     },
+    onClose: function () {
+      this.$store.dispatch("resetDeleteUserStatus");
+    },
   },
 };
 </script>
