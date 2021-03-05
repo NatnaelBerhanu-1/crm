@@ -17,7 +17,7 @@ class CreateReportsTable extends Migration
             $table->id();
             $table->double('income_amount');
             $table->string('income_description')->nullable();
-            $table->string('expense_amount');
+            $table->double('expense_amount');
             $table->string('expense_description')->nullable();
             $table->date('date');
             $table->timestamps();

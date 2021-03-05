@@ -10,6 +10,7 @@ use Carbon\Traits\Date;
 use DateTime;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class TaskController extends Controller
 {
@@ -21,7 +22,18 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         try {
-            if ($request->query('filterBy') == 'date') {
+            if ($request->query('forGraph') !=null){
+                $filterBy = $request->query('filterBy');
+                if($filterBy == "field"){
+                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'Field')->get();
+                }else if($filterBy == "studio"){
+                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'Studio')->get();
+                }else if($filterBy == "studiolandscape"){
+                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'studiolandscape')->get();
+                }
+                return $this->sendResponse(200, $revenue, "Resource fetched successfully");
+            }
+            else if ($request->query('filterBy') == 'date') {
                 if ($request->query('type') == 'print') {
                     $tasks = Task::whereDate('delivery_date', $request->query('date'))->get();
                 } else {
@@ -72,8 +84,6 @@ class TaskController extends Controller
                 'location' => 'required',
                 'type' => 'required',
                 'package' => 'required',
-                'description' => 'required',
-                'quantity' => 'required',
                 'total_price' => 'required',
                 'paid_amount' => 'required',
                 'shot_date' => 'required',
@@ -81,9 +91,10 @@ class TaskController extends Controller
                 'status' => 'required',
                 'user_id' => 'required',
                 'service' => 'required',
-                'data_location' => 'required',
                 'selection_date' => 'required',
                 'staffs' => 'required',
+                'tax' => 'required',
+                'desc_for_contract' => 'required'
             ]);
 
             if ($validated) {
@@ -105,6 +116,8 @@ class TaskController extends Controller
                 $data_location = $request->input('data_location');
                 $selection_date = $request->input('selection_date');
                 $staffs = $request->staffs;
+                $tax = $request->tax;
+                $desc_for_contract = $request->desc_for_contract;
 
                 if ($request->input('remark') != null) {
                     $remark = $request->input('remark');
@@ -128,10 +141,23 @@ class TaskController extends Controller
                     'remark' => $remark,
                     'data_location' => $data_location,
                     'selection_date' => $selection_date,
-                    'service' => json_encode($service)
+                    'service' => json_encode($service),
+                    'tax' => $tax
                 ]);
 
                 $task->staffs()->attach($staffs);
+
+                $doc = new TemplateProcessor(public_path('/contract_template')."/template_first.docx");
+                $services = "";
+                foreach($service as $s){
+                    $services = $services.$s.', ';
+                }
+                $doc->setValues(array('name'=>$name, 'phone_number'=>$phone_number, 'shot_date'=>$shot_date, 'services'=>$services, 'package_description'=>$desc_for_contract));
+                $filePath = public_path('/contract_template').'/'.$task->id.'.docx';
+                $doc->saveAs($filePath);
+
+                $task->contract_path = $filePath;
+                $task->save();
 
                 return $this->sendResponse(201, $task, 'Resource created successfully');
             } else {
@@ -166,6 +192,19 @@ class TaskController extends Controller
         }
     }
 
+    public function downloadContract($id){
+        try{
+            $task = Task::where('id', $id)->with('staffs')->first();
+            if (isset($task)) {
+                return response()->download($task->contract_path);
+            } else {
+                return $this->sendResponse(404, null, 'Resource not found');
+            }
+        }catch(Exception $e){
+
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -176,6 +215,8 @@ class TaskController extends Controller
     {
         //
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -208,6 +249,8 @@ class TaskController extends Controller
                     'data_location' => 'required',
                     'selection_date' => 'required',
                     'staffs' => 'required',
+                    'tax' => 'required',
+                    'desc_for_contract' => 'required'
                 ]);
                 if ($validated) {
                     if ($request->input('remark') != null) {
@@ -233,6 +276,8 @@ class TaskController extends Controller
                     $selection_date = $request->input('selection_date');
                     $service = $request->input('service');
                     $staffs = $request->staffs;
+                    $tax = $request->tax;
+                    $desc_for_contract = $request->desc_for_contract;
 
 
                     $task->name = $name;
@@ -251,6 +296,19 @@ class TaskController extends Controller
                     $task->data_location = $data_location;
                     $task->selection_date = $selection_date;
                     $task->service = json_encode($service);
+                    $task->tax = $tax;
+
+                    $doc = new TemplateProcessor(public_path('/contract_template')."/template_first.docx");
+                    $services = "";
+                    foreach($service as $s){
+                        $services = $services.$s.', ';
+                    }
+
+                    $doc->setValues(array('name'=>$name, 'phone_number'=>$phone_number, 'shot_date'=>$shot_date, 'services'=>$services, 'package_description'=>$desc_for_contract));
+                    $filePath = public_path('/contract_template').'/'.$task->id.'.docx';
+                    $doc->saveAs($filePath);
+
+                    $task->contract_path = $filePath;
                     $task->save();
 
                     $task->staffs()->detach();

@@ -20,8 +20,8 @@ class CreateTaskTable extends Migration
             $table->string('location');
             $table->string('type');
             $table->string('package');
-            $table->string('description');
-            $table->string('quantity');
+            $table->text('description')->nullable();
+            $table->string('quantity')->nullable();
             $table->double('total_price');
             $table->double('paid_amount');
             $table->dateTime('shot_date');
@@ -30,7 +30,7 @@ class CreateTaskTable extends Migration
             $table->string('remark')->nullable();
             $table->integer('user_id');
             $table->json('service');
-            $table->string('data_location');
+            $table->string('data_location')->nullable();
             $table->date('selection_date');
             $table->timestamps();
         });

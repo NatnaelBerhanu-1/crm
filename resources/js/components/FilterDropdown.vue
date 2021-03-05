@@ -1,11 +1,14 @@
 <template>
   <div class="w-36 bg-white rounded-sm border border-gray-300 shadow-md">
-      <ul>
+      <!-- <ul>
           <li @click="onFilter('overall')">Overall</li>
           <li @click="onFilter('thisyear')">This Year so far</li>
           <li @click="onFilter('last6months')">Last 6 Months</li>
           <li @click="onFilter('lastmonth')">Last Month</li>
           <li @click="onFilter('thismonth')">This Month</li>
+      </ul> -->
+      <ul>
+          <li v-for="filter in filterList" :key="filter.name" @click="onFilter(filter.onclick)">{{filter.name}}</li>
       </ul>
   </div>
 </template>
@@ -13,7 +16,8 @@
 <script>
 export default {
     props: {
-        onFilterClicked: Function
+        onFilterClicked: Function,
+        filterList: Array
     },
     methods: {
         onFilter: function(by){

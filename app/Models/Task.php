@@ -30,6 +30,7 @@ class Task extends Model
         'service',
         'data_location',
         'selection_date',
+        'tax'
     ];
 
     public function staffs(){

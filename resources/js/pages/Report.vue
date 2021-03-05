@@ -14,7 +14,14 @@
           <font-awesome-icon icon="filter" size="sm" />
           <span class="pl-2">Filter</span>
           <div v-if="showFilter" class="absolute top-8">
-            <FilterDropDown :onFilterClicked="onFilterClicked" />
+            <FilterDropDown :onFilterClicked="onFilterClicked" :filterList="[
+              {name: 'Overall', onclick: 'overall'},
+              {name: 'Last 6 Months', onclick: 'thisyear'},
+              {name: 'This Year so far', onclick: 'last6months'},
+              {name: 'Last Month', onclick: 'lastmonth'},
+              {name: 'This Month', onclick: 'list'},]
+              "
+               />
           </div>
         </div>
         <div
@@ -70,6 +77,33 @@
       :onClose="onClose"
     />
     <div class="mt-2 bg-white" v-if="reports.status == 200">
+      <div class="mt-2 mb-1">
+        <label for class="font-bold text-sm">Select Date:</label>
+        <input type="date" v-model="selected_date" @change="getDailyReport" />
+      </div>
+      <div class="mb-4 flex gap-4" v-if="dailyReports.status==200">
+        <div class="bg-green-100 p-2 w-40">
+          <p class="text-sm">Daily Earning</p>
+          <p
+            class="font-bold text-xl"
+            v-if="dailyReports.data.data.daily_income.length > 0"
+          >{{dailyReports.data.data.daily_income[0].data}}</p>
+        </div>
+        <div class="bg-red-100 p-2 w-40">
+          <p class="text-sm">Daily Expense</p>
+          <p
+            class="font-bold text-xl"
+            v-if="dailyReports.data.data.daily_expense.length > 0"
+          >{{dailyReports.data.data.daily_expense[0].data}}</p>
+        </div>
+        <div class="bg-blue-100 p-2 w-40">
+          <p class="text-sm">Total</p>
+          <p
+            class="font-bold text-xl"
+            v-if="dailyReports.data.data.daily_income.length > 0"
+          >{{dailyReports.data.data.daily_income[0].data - dailyReports.data.data.daily_expense[0].data}}</p>
+        </div>
+      </div>
       <table class="w-full">
         <thead>
           <tr class="text-black">
@@ -135,6 +169,7 @@ export default {
       showFilter: false,
       data: null,
       dataloaded: false,
+      selected_date: null,
     };
   },
   components: {
@@ -147,6 +182,9 @@ export default {
     reports: function () {
       return this.$store.getters.reports;
     },
+    dailyReports: function () {
+      return this.$store.getters.dailyReports;
+    },
     deleteReportStatus: function () {
       return this.$store.getters.deleteReportStatus;
     },
@@ -157,6 +195,7 @@ export default {
   created: function () {
     this.$store.dispatch("resetDeleteReportStatus");
     this.$store.dispatch("getReports");
+    this.$store.dispatch("getDailyReports");
     this.getGraphData("overall");
   },
   methods: {
@@ -165,26 +204,40 @@ export default {
         `/api/reports?forGraph=true&filterBy=${filterBy.toLowerCase()}`
       ).then((response) => {
         console.log(response);
-        var data = [];
         var label = [];
+        var expense = [];
+        var income = [];
         if (response.status == 200) {
-          response.data.forEach((element) => {
-            data.push(element.data);
+          response.data.data.income.forEach((element) => {
+            income.push(element.data);
             label.push(element.label);
+          });
+          response.data.data.expense.forEach((element) => {
+            expense.push(element.data);
           });
           this.data = {
             //Data to be represented on x-axis
             labels: label,
             datasets: [
               {
-                label: filterBy.toLowerCase(),
+                label: `${filterBy.toLowerCase()} income`,
                 backgroundColor: "#00000000",
                 pointRadius: 0,
                 borderWidth: 2,
                 borderColor: "#3D68FF",
                 backgroundColor: "#3D68FF10",
                 //Data to be represented on y-axis
-                data: data,
+                data: income,
+              },
+              {
+                label: `${filterBy.toLowerCase()} expense`,
+                backgroundColor: "#00000000",
+                pointRadius: 0,
+                borderWidth: 2,
+                borderColor: "#d6182e",
+                backgroundColor: "#d6182e10",
+                //Data to be represented on y-axis
+                data: expense,
               },
             ],
           };
@@ -217,6 +270,10 @@ export default {
     onFilterClicked: function (filterBy) {
       console.log(filterBy);
       this.getGraphData(filterBy);
+    },
+    getDailyReport: function () {
+      console.log("selected date" + this.selected_date);
+      this.$store.dispatch("getDailyReports", this.selected_date);
     },
   },
 };

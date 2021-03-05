@@ -47,8 +47,10 @@
               <br />
               <select v-model="task.location" id="role" required>
                 <option selected value>Select Location</option>
-                <option value="Field">Field</option>
-                <option value="Studio">Studio</option>
+                <option value="field">Field</option>
+                <option value="studio">Studio</option>
+                <option value="event">Event</option>
+                <option value="studio/landscape">Studio/Landscape</option>
               </select>
             </div>
             <div class="form-control">
@@ -65,7 +67,10 @@
               </select>
             </div>
             <div class="form-control">
-              <label >Service <span class="text-red-500" v-if="task.service==null">this field is required</span></label>
+              <label>
+                Service
+                <span class="text-red-500" v-if="task.service==null">this field is required</span>
+              </label>
               <br />
               <multiselect
                 v-model="task.service"
@@ -78,11 +83,11 @@
             <div class="form-control">
               <label>Package</label>
               <br />
-              <select v-model="task.package" id="package" required>
+              <select v-model="task.package" id="package" v-on:change="packageChanged" required>
                 <option selected value>Select Package</option>
-                <option value="Package 1">Package 1</option>
-                <option value="Package 2">Package 2</option>
-                <option value="Package 3">Package 3</option>
+                <option value="platinum">Platinum Package</option>
+                <option value="gold">Gold package</option>
+                <option value="silver">Silver package</option>
               </select>
             </div>
             <div class="form-control">
@@ -93,7 +98,6 @@
                 v-model="task.description"
                 id="description"
                 placeholder="Description"
-                required
               />
             </div>
             <div class="form-control">
@@ -117,11 +121,16 @@
                 v-model="task.quantity"
                 id="quantity"
                 placeholder="Quantity"
-                required
               />
             </div>
             <div class="form-control">
-              <label for>Assign Staff <span class="text-red-500" v-if="staffValues==null">this field is required</span></label>
+              <label for>
+                Assign Staff
+                <span
+                  class="text-red-500"
+                  v-if="staffValues==null"
+                >this field is required</span>
+              </label>
               <br />
               <multiselect
                 v-model="staffValues"
@@ -196,14 +205,27 @@
               </select>
             </div>
             <div class="form-control">
-              <label for>Remark</label>
+              <label for>Package Description</label>
               <textarea
                 v-model="task.remark"
                 id="remark"
-                class="w-full h-28"
+                class="w-full"
                 rows="4"
                 placeholder="remark"
               ></textarea>
+            </div>
+            <div class="form-control">
+              <label for>Tax</label>
+              <div class="flex gap-4">
+                <div class="flex content-center items-center">
+                  <input type="radio" v-model="task.tax" value="true" class="w-auto" id="tax-yes" />
+                  <label for="tax-yes" class="pl-2">yes</label>
+                </div>
+                <div class="flex content-center items-center">
+                  <input type="radio" v-model="task.tax" value="false" class="w-auto" id="tax-no" />
+                  <label for="tax-no" class="pl-2">no</label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -239,7 +261,141 @@ export default {
     return {
       today: new Date().toISOString(),
       phoneNumberError: false,
-      staffValues: null
+      staffValues: null,
+      packageDescriptions: [
+        `
+        • Studio: 45 x 60, 30-page laminated album
+        • Landscape: 30 x 90, 30-page laminated album
+        • Landscape video 10 – 12 minutes
+        • Photo:
+        o 1 - 60 x 120 with matte frame
+        o 1 - 50 x 80 Photo + board frame
+        o 2 – 30 x 45 Photo + board frame
+        o 500 thank you card
+        o 2 mini album (15 x 30) 20 page
+        o 2 signboards + softcopy
+        • Bridal Photo
+        o 20 x 25, 22 pages laminated + video by 1 camera man
+        • Wedding day
+        o Photo - 40 x 60, 40 pages laminated album with leather cover (by 2 camera man)
+        o Video – by 3 or 4 camera man + GoPro + Drone with full HD
+        • Melse (መልስ)
+        o Photo – 45 x 60, 30 pages laminated album
+        o Video – by 2 camera man + drone with editing
+        • Kelkel (ቅልቅል)
+        o Photo – 30 x 60, 22 pages laminated album
+        o Video – by 2 camera man with editing
+        • Enshoshula (እንሾሽላ)
+        o Photo – 40 x 60, 30 pages
+        o Video – by 2 camera man with editing
+        • Soft copy of all photos and videos will be provide with 2 hard disk copies
+          `,
+        `
+        • Studio: 40 x 60, 22 pages laminated album
+        • Landscape: 30 x 90, 22 pages laminated album
+        • Landscape video: 8 – 12 minutes video
+        • Photo:
+        o 2 – 50 x 80 photo + board frame
+        o 2 – 30 x 45 photo + board frame
+        o 2 - 20 pages mini album (15 x 30)
+        o 400 thank you card
+        o 2 signboards + soft copy
+        • Bridal Photo: 20 x 25, 22 pages
+        • Wedding day
+        o Photo – 45 x 60, 30 pages laminated album by 2 camera man
+        o Video – by 3 camera man full HD with editing
+        • Melse (መልስ)
+        o Photo - 45 x 60, 30 pages laminated album
+        o Video – by 2 camera man + drone
+        • Kelkel (ቅልቅል)
+        o Photo – 30 x 60, 22 pages laminated album
+        o Video by 1 camera man
+        `,
+        `
+        • Studio: 40 x 60, 22 pages laminated album
+        • Landscape: 30 x 90, 22 pages laminated album
+        • Photo:
+        o 2 – 50 x 80 photo + frame board
+        o 2 - 30 x 45 photo + frame board
+        o 1 signboard
+        o 1 mini album (15 x 30) 20 pages
+        o 300 thank you card
+        • Bridal photo (20 x 25)
+        • Wedding day
+        o Photo – 45 x 60, 30 pages laminated album
+        o Video – by 3 camera man + drone full HD with editing
+        • Melse (መልስ)
+        o Photo – 45 x 60, 30 pages laminated album
+        o Video – by 2 camera man full HD with editing
+        `,
+      ],
+      packageDescriptionsForContract: [
+        `
+        • Studio: 45 x 60, 30-page laminated album<w:br/>
+        • Landscape: 30 x 90, 30-page laminated album<w:br/>
+        • Landscape video 10 – 12 minutes<w:br/>
+        • Photo:<w:br/>
+        o 1 - 60 x 120 with matte frame<w:br/>
+        o 1 - 50 x 80 Photo + board frame<w:br/>
+        o 2 – 30 x 45 Photo + board frame<w:br/>
+        o 500 thank you card<w:br/>
+        o 2 mini album (15 x 30) 20 page<w:br/>
+        o 2 signboards + softcopy<w:br/>
+        • Bridal Photo<w:br/>
+        o 20 x 25, 22 pages laminated + video by 1 camera man<w:br/>
+        • Wedding day<w:br/>
+        o Photo - 40 x 60, 40 pages laminated album with leather cover (by 2 camera man)<w:br/>
+        o Video – by 3 or 4 camera man + GoPro + Drone with full HD<w:br/>
+        • Melse (መልስ)<w:br/>
+        o Photo – 45 x 60, 30 pages laminated album<w:br/>
+        o Video – by 2 camera man + drone with editing<w:br/>
+        • Kelkel (ቅልቅል)<w:br/>
+        o Photo – 30 x 60, 22 pages laminated album<w:br/>
+        o Video – by 2 camera man with editing<w:br/>
+        • Enshoshula (እንሾሽላ)<w:br/>
+        o Photo – 40 x 60, 30 pages<w:br/>
+        o Video – by 2 camera man with editing<w:br/>
+        • Soft copy of all photos and videos will be provide with 2 hard disk copies
+          `,
+        `
+        • Studio: 40 x 60, 22 pages laminated album<w:br/>
+        • Landscape: 30 x 90, 22 pages laminated album<w:br/>
+        • Landscape video: 8 – 12 minutes video<w:br/>
+        • Photo:<w:br/>
+        o 2 – 50 x 80 photo + board frame<w:br/>
+        o 2 – 30 x 45 photo + board frame<w:br/>
+        o 2 - 20 pages mini album (15 x 30)<w:br/>
+        o 400 thank you card<w:br/>
+        o 2 signboards + soft copy<w:br/>
+        • Bridal Photo: 20 x 25, 22 pages<w:br/>
+        • Wedding day<w:br/>
+        o Photo – 45 x 60, 30 pages laminated album by 2 camera man<w:br/>
+        o Video – by 3 camera man full HD with editing<w:br/>
+        • Melse (መልስ)<w:br/>
+        o Photo - 45 x 60, 30 pages laminated album<w:br/>
+        o Video – by 2 camera man + drone<w:br/>
+        • Kelkel (ቅልቅል)<w:br/>
+        o Photo – 30 x 60, 22 pages laminated album<w:br/>
+        o Video by 1 camera man
+        `,
+        `
+        • Studio: 40 x 60, 22 pages laminated album<w:br/>
+        • Landscape: 30 x 90, 22 pages laminated album<w:br/>
+        • Photo:<w:br/>
+        o 2 – 50 x 80 photo + frame board<w:br/>
+        o 2 - 30 x 45 photo + frame board<w:br/>
+        o 1 signboard<w:br/>
+        o 1 mini album (15 x 30) 20 pages<w:br/>
+        o 300 thank you card<w:br/>
+        • Bridal photo (20 x 25)<w:br/>
+        • Wedding day<w:br/>
+        o Photo – 45 x 60, 30 pages laminated album<w:br/>
+        o Video – by 3 camera man + drone full HD with editing<w:br/>
+        • Melse (መልስ)<w:br/>
+        o Photo – 45 x 60, 30 pages laminated album<w:br/>
+        o Video – by 2 camera man full HD with editing<w:br/>
+        `,
+      ],
     };
   },
   computed: {
@@ -253,27 +409,27 @@ export default {
     task: function () {
       return this.$store.getters.addTask;
     },
-    services: function() {
-        return this.$store.getters.services;
-    }
+    services: function () {
+      return this.$store.getters.services;
+    },
   },
   methods: {
     addTask: function (e) {
       console.log(this.value);
       e.preventDefault();
       var phoneno = /^\d{10}$/;
-      if (this.staffValues==null || this.task.service == null){
-          alert("fill all the required fields");
-          return;
+      if (this.staffValues == null || this.task.service == null) {
+        alert("fill all the required fields");
+        return;
       }
       if (this.task.phone_number.match(phoneno)) {
         this.phoneNumberError = false;
-        this.staffValues.forEach(staff => {
-            this.task.staffs.push(staff.id);
+        this.staffValues.forEach((staff) => {
+          this.task.staffs.push(staff.id);
         });
         console.log(this.task);
-        this.$store.dispatch("addTask", this.task).then(()=>{
-            this.staffValues = null;
+        this.$store.dispatch("addTask", this.task).then(() => {
+          this.staffValues = null;
         });
       } else {
         this.phoneNumberError = true;
@@ -282,10 +438,29 @@ export default {
     onClose: function (e) {
       this.$store.dispatch("resetAddTaskStatus");
     },
+    packageChanged: function (e) {
+      console.log(this.task.package);
+      var index;
+      switch (this.task.package) {
+        case "platinum":
+          index = 0;
+          break;
+        case "gold":
+          index = 1;
+          break;
+        case "silver":
+          index = 2;
+          break;
+        default:
+          break;
+      }
+      this.task.remark = this.packageDescriptions[index];
+      this.task.desc_for_contract = this.packageDescriptionsForContract[index];
+    },
   },
   created: function () {
     this.$store.dispatch("resetAddTaskStatus");
-    this.$store.dispatch("getUsers", {only: "staff"});
+    this.$store.dispatch("getUsers", { only: "staff" });
   },
   destroyed: function () {
     this.$store.dispatch("resetAddTask");
@@ -294,11 +469,22 @@ export default {
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
-.form-control {
-  @apply w-full h-20;
+
+.form-control input{
+  @apply w-full h-10;
 }
+
+.form-control textarea{
+    @apply h-20;
+    resize: none;
+}
+
 .form-control input,
 .form-control select {
   @apply w-full;
+}
+
+.form-control input[type="radio"] {
+  @apply w-4;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="absolute w-full h-screen flex justify-items-center justify-center left-0 top-0 z-50 bg-black bg-opacity-60 p-12"
+      class="fixed w-full h-full flex justify-items-center justify-center left-0 bottom-0 top-0 z-50 bg-black bg-opacity-60 p-12"
       v-if="showModal"
     >
       <div class="p-8 bg-white rounded-md h-min w-max">
@@ -28,6 +28,7 @@
             <ModalData title="Selection Date" :content="detailTask.selection_date" />
             <ModalData title="Shot Date" :content="detailTask.shot_date" />
             <ModalData title="Delivery Date" :content="detailTask.delivery_date" />
+            <ModalData title="Tax" :content="detailTask.tax" />
           </div>
         </div>
       </div>
@@ -54,13 +55,31 @@
             </button>
           </div>
         </div>
-        <router-link to="add" append>
-          <div class="bg-primary h-8 text-white px-2 rounded text-sm flex flex-row items-center">
-            <font-awesome-icon icon="plus" size="sm" />
-            <span class="ml-1">Add Task</span>
+        <div class="flex flex-row gap-2">
+          <div
+            v-on-clickaway="hideFilterModal"
+            @click="showFilter = !showFilter"
+            class="bg-white border border-gray-300 cursor-pointer hover:bg-gray-300 hover:text-black h-8 text-black px-2 mr-2 rounded text-sm flex flex-row items-center relative"
+          >
+            <font-awesome-icon icon="filter" size="sm" />
+            <span class="pl-2">Filter</span>
+            <div v-if="showFilter" class="absolute top-8">
+              <FilterDropDown :onFilterClicked="onFilterClicked" :filterList="[
+              {name: 'Studio', onclick: 'studio'},
+              {name: 'Field', onclick: 'field'},
+              {name: 'Studio/landscape', onclick: 'studiolandscape'},
+              ]" />
+            </div>
           </div>
-        </router-link>
+          <router-link to="add" append>
+            <div class="bg-primary h-8 text-white px-2 rounded text-sm flex flex-row items-center">
+              <font-awesome-icon icon="plus" size="sm" />
+              <span class="ml-1">Add Task</span>
+            </div>
+          </router-link>
+        </div>
       </div>
+      <line-chart class="py-2 h-96 border w-full my-8" :chartData="data" v-if="dataloaded" />
       <Alert
         type="success"
         message="Task Deleted Successfully"
@@ -82,10 +101,10 @@
               <th>Type</th>
               <th>Location</th>
               <th>Package</th>
-              <th>Description</th>
+              <th>Status</th>
               <th>Quantity</th>
               <th>Total Price</th>
-              <th class="w-20"></th>
+              <th class="w-32"></th>
             </tr>
           </thead>
           <tbody>
@@ -98,7 +117,15 @@
               <td>{{task.type}}</td>
               <td>{{task.location}}</td>
               <td>{{task.package}}</td>
-              <td>{{task.description}}</td>
+              <td>
+                <div class="flex items-center justify-center">
+                  <div
+                    class="h-2 w-2 mr-2 rounded-full"
+                    :class="task.status=='Delayed' ? 'bg-red-500 ':task.status == 'Ongoing' ? 'bg-yellow-500' :'bg-green-500 '"
+                  ></div>
+                  <span>{{task.status}}</span>
+                </div>
+              </td>
               <td>{{task.quantity}}</td>
               <td>{{task.total_price}}</td>
               <td class="text-gray-300">
@@ -111,8 +138,14 @@
                 <font-awesome-icon
                   icon="trash"
                   v-on:click="deleteTask(task.id)"
-                  class="hover:text-red-400 cursor-pointer"
+                  class="hover:text-red-400 mr-2 cursor-pointer"
                 />
+                    <font-awesome-icon
+                    icon="download"
+                    v-on:click="downloadContract(task.id)"
+                    class="hover:text-green-400 cursor-pointer"
+                    />
+
               </td>
             </tr>
           </tbody>
@@ -150,13 +183,22 @@ td {
 import Alert from "../components/Alert";
 import Pagination from "../components/Pagination";
 import ModalData from "../components/ModalData";
+import LineChart from "../components/ReportGraph.vue";
+import Axios from "axios";
+import FilterDropDown from "../components/FilterDropdown";
+import { mixin as clickaway } from "vue-clickaway";
+import axios from 'axios';
 
 export default {
+  mixins: [clickaway],
   data: function () {
     return {
       searchVal: null,
       showModal: false,
       detailTask: {},
+      data: null,
+      dataloaded: false,
+      showFilter: false,
     };
   },
   computed: {
@@ -170,11 +212,14 @@ export default {
   created: function () {
     this.$store.dispatch("resetDeleteTaskStatus");
     this.$store.dispatch("getTasks");
+    this.getGraphData("studio");
   },
   components: {
     Alert,
     Pagination,
     ModalData,
+    LineChart,
+    FilterDropDown,
   },
   methods: {
     rowClicked: function (data) {
@@ -193,11 +238,57 @@ export default {
         this.$store.dispatch("deleteTask", taskId);
       }
     },
+    downloadContract: async function (taskId)  {
+       console.log("downloading");
+       window.location = '/api/downloadContract/'+taskId;
+    },
+    hideFilterModal: function () {
+      if (this.showFilter) {
+        this.showFilter = false;
+      }
+    },
     search: function () {
       this.$store.dispatch("getTasks", { page: 1, search: this.searchVal });
     },
     onClose: function (e) {
       this.$store.dispatch("resetDeleteTaskStatus");
+    },
+    getGraphData: function (filterBy) {
+      Axios.get(
+        `/api/tasks?forGraph=true&filterBy=${filterBy.toLowerCase()}`
+      ).then((response) => {
+        console.log(response);
+        var label = [];
+        var data = [];
+        if (response.status == 200) {
+          response.data.data.forEach((element) => {
+            data.push(element.data);
+            label.push(element.label);
+          });
+          this.data = {
+            //Data to be represented on x-axis
+            labels: label,
+            datasets: [
+              {
+                label: `${filterBy.toLowerCase()} income`,
+                backgroundColor: "#00000000",
+                pointRadius: 0,
+                borderWidth: 2,
+                borderColor: "#3D68FF",
+                backgroundColor: "#3D68FF10",
+                //Data to be represented on y-axis
+                data: data,
+              },
+            ],
+          };
+
+          this.dataloaded = true;
+        }
+      });
+    },
+    onFilterClicked: function (filterBy) {
+      console.log(filterBy);
+      this.getGraphData(filterBy);
     },
   },
 };

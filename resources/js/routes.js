@@ -117,7 +117,7 @@ router.beforeEach((to, from, next) => {
         "staff/add",
         "staff/edit",
         "report/add",
-        "report/edit"
+        "report/edit",
     ];
     var forStaff = ["calendar", "settings"];
     if (localService.isAuthenticated()) {

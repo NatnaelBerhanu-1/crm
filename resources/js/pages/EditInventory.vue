@@ -84,10 +84,6 @@
 .form-control textarea {
   @apply w-full;
 }
-
-.form-control textarea {
-  @apply h-24;
-}
 </style>
 <script>
 import Alert from "../components/Alert";

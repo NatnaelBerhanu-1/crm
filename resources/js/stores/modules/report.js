@@ -10,7 +10,8 @@ const state = () => ({
     toPrint: {},
     reports: {},
     editReport: {},
-    addReport: {}
+    addReport: {},
+    dailyReports: {}
 });
 
 //getters
@@ -38,6 +39,9 @@ const getters = {
     },
     toPrint: (state, getters) => {
         return state.toPrint;
+    },
+    dailyReports: (state, getters) => {
+        return state.dailyReports;
     }
 };
 const mutations = {
@@ -71,6 +75,9 @@ const mutations = {
     },
     setToPrint(state, payload) {
         state.toPrint = payload;
+    },
+    setDailyReports(state, payload) {
+        state.dailyReports = payload;
     }
 };
 const actions = {
@@ -78,8 +85,20 @@ const actions = {
         var baseUrl = "/api/reports?page=";
         var url = baseUrl + data.page;
         Axios.get(url).then(response => {
-            console.log(response.data);
+            console.log(response);
             commit("setReports", editResponseWithPagination(response));
+        });
+    },
+    getDailyReports({commit, state}, date = ""){
+        console.log(date);
+        if(date==""){
+            date = new Date().toISOString().slice(0, 10);
+        }
+        Axios.get(`/api/reports?daily=${date}`).then(response => {
+            if(response.status == 200){
+                console.log(response);
+                commit("setDailyReports", response);
+            }
         });
     },
     getSingleReport({ commit, state }, id) {
