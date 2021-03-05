@@ -444,10 +444,19 @@ export default {
         this.task.data.data.staffs.forEach(staff => {
             staffs.push(staff.id);
         });
+        if (this.task.data.data.desc_for_contract) {
+            console.log("here");
+        }else{
+            this.packageChanged();
+        }
+        console.log(this.task.data.data.desc_for_contract);
+        console.log(this.task.data.data.remark);
         var data = Object.assign({}, this.task.data.data);
         data.staffs = staffs;
         console.log(data);
         console.log(this.task.data.data);
+        console.log(this.task.data.data.desc_for_contract);
+
         this.$store.dispatch("updateTask", data);
       } else {
         this.phoneNumberError = true;

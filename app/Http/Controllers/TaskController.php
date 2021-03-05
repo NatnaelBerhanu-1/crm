@@ -325,7 +325,7 @@ class TaskController extends Controller
             echo ($e->validator->getMessageBag());
             return $this->sendResponse(500, null, 'Something went wrong');
         } catch (Exception $e) {
-            echo ($e);
+            echo ($e->getMessage());
             return $this->sendResponse(500, null, 'Something went wrong');
         }
     }
