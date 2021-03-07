@@ -25,9 +25,9 @@ class TaskController extends Controller
             if ($request->query('forGraph') !=null){
                 $filterBy = $request->query('filterBy');
                 if($filterBy == "field"){
-                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'Field')->get();
+                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'field')->get();
                 }else if($filterBy == "studio"){
-                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'Studio')->get();
+                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'studio')->get();
                 }else if($filterBy == "studiolandscape"){
                     $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'studiolandscape')->get();
                 }

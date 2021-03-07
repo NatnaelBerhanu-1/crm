@@ -205,16 +205,6 @@
               </select>
             </div>
             <div class="form-control">
-              <label for>Package Description</label>
-              <textarea
-                v-model="task.remark"
-                id="remark"
-                class="w-full"
-                rows="4"
-                placeholder="remark"
-              ></textarea>
-            </div>
-            <div class="form-control">
               <label for>Tax</label>
               <div class="flex gap-4">
                 <div class="flex content-center items-center">
@@ -226,6 +216,16 @@
                   <label for="tax-no" class="pl-2">no</label>
                 </div>
               </div>
+            </div>
+            <div class="form-control">
+              <label for>Package Description</label>
+              <textarea
+                v-model="task.remark"
+                id="remark"
+                class="w-full"
+                rows="4"
+                placeholder="remark"
+              ></textarea>
             </div>
           </div>
         </div>
