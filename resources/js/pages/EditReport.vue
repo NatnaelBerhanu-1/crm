@@ -113,7 +113,7 @@ export default {
   methods: {
     editReport: function (e) {
       e.preventDefault();
-      console.log(this.report);
+      // console.log(this.report);
       this.$store.dispatch("updateReport", this.report.data.data);
     },
     onClose: function (e) {

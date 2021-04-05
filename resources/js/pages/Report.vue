@@ -63,7 +63,6 @@
         <button class="btn-primary" type="submit">Generate</button>
       </form>
     </div>
-
     <Alert
       type="success"
       message="Report Deleted Successfully"
@@ -203,7 +202,7 @@ export default {
       Axios.get(
         `/api/reports?forGraph=true&filterBy=${filterBy.toLowerCase()}`
       ).then((response) => {
-        console.log(response);
+        // console.log(response);
         var label = [];
         var expense = [];
         var income = [];
@@ -223,7 +222,7 @@ export default {
                 label: `${filterBy.toLowerCase()} income`,
                 backgroundColor: "#00000000",
                 pointRadius: 0,
-                borderWidth: 2,
+                borderWidth: .5,
                 borderColor: "#3D68FF",
                 backgroundColor: "#3D68FF10",
                 //Data to be represented on y-axis
@@ -233,7 +232,7 @@ export default {
                 label: `${filterBy.toLowerCase()} expense`,
                 backgroundColor: "#00000000",
                 pointRadius: 0,
-                borderWidth: 2,
+                borderWidth: .5,
                 borderColor: "#d6182e",
                 backgroundColor: "#d6182e10",
                 //Data to be represented on y-axis
@@ -254,7 +253,7 @@ export default {
     },
     printReport: function (e) {
       e.preventDefault();
-      console.log({ from: this.from, to: this.to });
+      // console.log({ from: this.from, to: this.to });
       this.$store.dispatch("getToPrint", { from: this.from, to: this.to });
     },
     hidePrintModal: function () {
@@ -268,11 +267,11 @@ export default {
       }
     },
     onFilterClicked: function (filterBy) {
-      console.log(filterBy);
+      // console.log(filterBy);
       this.getGraphData(filterBy);
     },
     getDailyReport: function () {
-      console.log("selected date" + this.selected_date);
+      // console.log("selected date" + this.selected_date);
       this.$store.dispatch("getDailyReports", this.selected_date);
     },
   },

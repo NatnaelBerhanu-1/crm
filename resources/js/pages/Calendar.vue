@@ -88,7 +88,7 @@ export default {
   created: function () {
     this.$store.dispatch("getCalendarTasks").then(() => {
       this.showCalendar = true;
-      console.log(this.$store.getters.calendarTasks);
+      // console.log(this.$store.getters.calendarTasks);
       this.calendarOptions.events = this.$store.getters.calendarTasks;
     });
   },
@@ -98,20 +98,20 @@ export default {
         this.gettingSelectedTasksStatus = 'busy';
         var type = info.event.extendedProps.type;
         var date = `${info.event.start.getFullYear()}-${Number(info.event.start.getMonth())+1}-${info.event.start.getDate()}`;
-        console.log(info.event.start.toUTCString());
-        console.log(info.event.start.toISOString());
+        // console.log(info.event.start.toUTCString());
+        // console.log(info.event.start.toISOString());
         Axios.get(`/api/tasks?filterBy=date&type=${info.event.extendedProps.type}&date=${date}`).then(
             response => {
-                console.log(response);
+                // console.log(response);
                 this.gettingSelectedTasksStatus = 'success';
                 this.selectedTasks = response.data.data;
             }
         )
     },
     parseDate: function (rawdate) {
-      console.log(rawdate);
+      // console.log(rawdate);
       var date = new Date(rawdate);
-      console.log();
+      // console.log();
       return date.toLocaleString();
     },
   },

@@ -121,7 +121,7 @@ router.beforeEach((to, from, next) => {
     ];
     var forStaff = ["calendar", "settings"];
     if (localService.isAuthenticated()) {
-        console.log(`path: ${to.path.slice(1)}`);
+        // console.log(`path: ${to.path.slice(1)}`);
         if (allPaths.indexOf(to.path.slice(1)) == -1) {
             next({ path: "/dashboard" });
         } else {
@@ -138,7 +138,7 @@ router.beforeEach((to, from, next) => {
     } else if (!localService.isAuthenticated() && to.path == "/login") {
         next();
     } else {
-        console.log("here");
+        // console.log("here");
         next("/login");
     }
 });

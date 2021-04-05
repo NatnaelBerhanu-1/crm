@@ -112,7 +112,7 @@ export default {
   methods: {
     addReport: function (e) {
       e.preventDefault();
-      console.log(this.report);
+      // console.log(this.report);
       this.$store.dispatch("addReport", this.report);
     },
     onClose: function (e) {

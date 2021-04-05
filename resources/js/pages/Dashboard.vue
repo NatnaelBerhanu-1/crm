@@ -93,7 +93,7 @@ export default {
             data.forEach(element => {
                 randomArr[data.indexOf(element)] = element.data;
             });
-            console.log(randomArr);
+            // console.log(randomArr);
             return randomArr;
         }
     }

@@ -103,7 +103,7 @@ export default {
   methods: {
     editItem: function (e) {
       e.preventDefault();
-      console.log(this.item.data.data);
+      // console.log(this.item.data.data);
       this.$store.dispatch("updateItem", this.item.data.data);
     },
     onClose: function (e) {

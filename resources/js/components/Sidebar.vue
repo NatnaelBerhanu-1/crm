@@ -56,12 +56,12 @@ export default {
     },
     watch: {
         '$route' (to, from){
-            console.log(to);
+            // console.log(to);
             this.currentRoute = to.path
         }
     },
     created: function() {
-        console.log(this.$router.currentRoute.path);
+        // console.log(this.$router.currentRoute.path);
     }
 }
 

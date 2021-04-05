@@ -59,17 +59,27 @@
           <div
             v-on-clickaway="hideFilterModal"
             @click="showFilter = !showFilter"
-            class="bg-white border border-gray-300 cursor-pointer hover:bg-gray-300 hover:text-black h-8 text-black px-2 mr-2 rounded text-sm flex flex-row items-center relative"
+            class="bg-white border border-gray-300 cursor-pointer z-50 hover:bg-gray-300 hover:text-black h-8 text-black px-2 mr-2 rounded text-sm flex flex-row items-center relative"
           >
             <font-awesome-icon icon="filter" size="sm" />
             <span class="pl-2">Filter</span>
             <div v-if="showFilter" class="absolute top-8">
-              <FilterDropDown :onFilterClicked="onFilterClicked" :filterList="[
+              <FilterDropDown
+                :onFilterClicked="onFilterClicked"
+                :filterList="[
               {name: 'Studio', onclick: 'studio'},
               {name: 'Field', onclick: 'field'},
               {name: 'Studio/landscape', onclick: 'studiolandscape'},
-              ]" />
+              ]"
+              />
             </div>
+          </div>
+          <div
+            @click="showTaxed = !showTaxed"
+            class="bg-white border border-gray-300 cursor-pointer z-50 hover:bg-gray-300 hover:text-black h-8 text-black px-2 mr-2 rounded text-sm flex flex-row items-center relative"
+          >
+            <font-awesome-icon icon="percentage" size="sm" />
+            <span class="pl-2">Show Taxed</span>
           </div>
           <router-link to="add" append>
             <div class="bg-primary h-8 text-white px-2 rounded text-sm flex flex-row items-center">
@@ -79,7 +89,45 @@
           </router-link>
         </div>
       </div>
-      <line-chart class="py-2 h-96 border w-full my-8" :chartData="data" v-if="dataloaded" />
+      <div
+        class="w-full h-full z-50 right-0 left-0 top-0 bottom-0 bg-black bg-opacity-30 fixed"
+        v-if="showTaxed"
+      >
+        <div class="absolute right-20 top-20 text-primary font-bold cursor-pointer" @click="showTaxed = !showTaxed">close</div>
+        <div class="p-6 m-4 bg-white shadow-md border rounded-md radius-sm">
+          <!-- <div class="text-center text-primary" v-if="printReportStatus == 'busy'">
+            <font-awesome-icon icon="spinner" spin />
+          </div> -->
+          <p class="text-primary text-xl mb-4 font-bold">Generate Taxed Tasks Report</p>
+          <form v-on:submit.prevent="getTaxed" method="get" class="flex flex-row gap-4 items-end">
+            <div>
+              <label for class="font-light">from:</label>
+              <br />
+              <input type="date" class="w-48" v-model="taxedFrom" id="from" required />
+            </div>
+            <div>
+              <label for class="font-light">to:</label>
+              <br />
+              <input class="w-48" type="date" v-model="taxedTo" id="to" required />
+            </div>
+              <div>
+                   <label for class="text-primary font-bold"></label>
+              <br />
+                <button class="btn-primary pt-0 my-1" type="submit">Generate</button>
+              </div>
+          </form>
+          <p v-if="taxedReport!=null" class="border rounded-md border-green-500 p-4 mt-4">Total taxed between <span class="italic">{{taxedFrom}}</span> to <span class="italic">{{taxedTo}}</span> is <span class="text-primary-dark font-bold">{{taxedReport.total}}</span></p>
+        </div>
+      </div>
+      <!-- <line-chart class="py-2 h-96 border w-full my-8" :chartData="data" v-if="dataloaded" /> -->
+      <highcharts
+        :constructorType="'stockChart'"
+        :options="chartOptions"
+        :highcharts="hcInstance"
+        :updateArgs="[true, false]"
+        v-if="dataloaded"
+        class="py-2 h-96 border w-full my-8 z-10"
+      ></highcharts>
       <Alert
         type="success"
         message="Task Deleted Successfully"
@@ -140,12 +188,11 @@
                   v-on:click="deleteTask(task.id)"
                   class="hover:text-red-400 mr-2 cursor-pointer"
                 />
-                    <font-awesome-icon
-                    icon="download"
-                    v-on:click="downloadContract(task.id)"
-                    class="hover:text-green-400 cursor-pointer"
-                    />
-
+                <font-awesome-icon
+                  icon="download"
+                  v-on:click="downloadContract(task.id)"
+                  class="hover:text-green-400 cursor-pointer"
+                />
               </td>
             </tr>
           </tbody>
@@ -171,34 +218,56 @@ th {
 }
 
 .input {
-  @apply w-60;
+  @apply w-60 m-0;
 }
 table,
 th,
 td {
   @apply text-sm;
 }
+
 </style>
 <script>
 import Alert from "../components/Alert";
 import Pagination from "../components/Pagination";
 import ModalData from "../components/ModalData";
-import LineChart from "../components/ReportGraph.vue";
+// import LineChart from "../components/ReportGraph.vue";
 import Axios from "axios";
 import FilterDropDown from "../components/FilterDropdown";
 import { mixin as clickaway } from "vue-clickaway";
-import axios from 'axios';
+import Highcharts from "highcharts";
 
 export default {
   mixins: [clickaway],
   data: function () {
     return {
+      hcInstance: Highcharts,
       searchVal: null,
       showModal: false,
       detailTask: {},
       data: null,
       dataloaded: false,
       showFilter: false,
+      showTaxed: false,
+      taxedTo: null,
+      taxedFrom: null,
+      chartOptions: {
+        xAxis: {
+          // tickmarkPlacement: "on",
+          type: "datetime",
+        },
+        series: [
+          {
+            // pointPlacement: "on",
+            pointInterval: 7,
+            pointIntervalUnit: "day",
+            data: null,
+            dataLabels: {
+              enabled: true,
+            },
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -208,6 +277,9 @@ export default {
     deleteTaskStatus: function () {
       return this.$store.getters.deleteTaskStatus;
     },
+    taxedReport: function() {
+        return this.$store.getters.taxedReport;
+    }
   },
   created: function () {
     this.$store.dispatch("resetDeleteTaskStatus");
@@ -218,7 +290,7 @@ export default {
     Alert,
     Pagination,
     ModalData,
-    LineChart,
+    // LineChart,
     FilterDropDown,
   },
   methods: {
@@ -227,9 +299,9 @@ export default {
       this.showModal = true;
     },
     parseDate: function (rawdate) {
-      console.log(rawdate);
+      // console.log(rawdate);
       var date = new Date(rawdate);
-      console.log();
+      // console.log();
       return date.toLocaleString();
     },
     deleteTask: function (taskId) {
@@ -238,14 +310,22 @@ export default {
         this.$store.dispatch("deleteTask", taskId);
       }
     },
-    downloadContract: async function (taskId)  {
-       console.log("downloading");
-       window.location = '/api/downloadContract/'+taskId;
+    downloadContract: async function (taskId) {
+      // console.log("downloading");
+      window.location = "/api/downloadContract/" + taskId;
     },
     hideFilterModal: function () {
       if (this.showFilter) {
         this.showFilter = false;
       }
+    },
+    hideTaxedModal: function () {
+      if (this.showTaxed) {
+        this.showTaxed = false;
+      }
+    },
+    getTaxed: function () {
+        this.$store.dispatch("getTaxed", {from: this.taxedFrom, to: this.taxedTo});
     },
     search: function () {
       this.$store.dispatch("getTasks", { page: 1, search: this.searchVal });
@@ -257,14 +337,22 @@ export default {
       Axios.get(
         `/api/tasks?forGraph=true&filterBy=${filterBy.toLowerCase()}`
       ).then((response) => {
-        console.log(response);
+        // console.log(response);
         var label = [];
         var data = [];
         if (response.status == 200) {
+          // console.log(response.data);
           response.data.data.forEach((element) => {
-            data.push(element.data);
+            data.push(parseInt(element.data));
             label.push(element.label);
           });
+          // console.log(data);
+          this.chartOptions.series[0].data = data;
+          this.chartOptions.series[0].pointStart = Date.parse(label[0]);
+          //   this.chartOptions.series[0].pointInterval =  3600 * 1000 * 24;
+          // console.log(label[0]);
+
+          // this.chartOptions.xAxis.categories = label;
           this.data = {
             //Data to be represented on x-axis
             labels: label,
@@ -281,13 +369,12 @@ export default {
               },
             ],
           };
-
           this.dataloaded = true;
         }
       });
     },
     onFilterClicked: function (filterBy) {
-      console.log(filterBy);
+      // console.log(filterBy);
       this.getGraphData(filterBy);
     },
   },

@@ -36,4 +36,9 @@ class Task extends Model
     public function staffs(){
         return $this->belongsToMany(User::class, 'staff_tasks', 'task_id', 'staff_id');
     }
+
+    public function scopeOrderByStatus($query)
+    {
+        return $query->orderBy('status','desc');
+    }
 }

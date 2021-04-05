@@ -85,25 +85,25 @@ const actions = {
         var baseUrl = "/api/reports?page=";
         var url = baseUrl + data.page;
         Axios.get(url).then(response => {
-            console.log(response);
+            // console.log(response);
             commit("setReports", editResponseWithPagination(response));
         });
     },
     getDailyReports({commit, state}, date = ""){
-        console.log(date);
+        // console.log(date);
         if(date==""){
             date = new Date().toISOString().slice(0, 10);
         }
         Axios.get(`/api/reports?daily=${date}`).then(response => {
             if(response.status == 200){
-                console.log(response);
+                // console.log(response);
                 commit("setDailyReports", response);
             }
         });
     },
     getSingleReport({ commit, state }, id) {
         Axios.get(`/api/reports/${id}`).then(response => {
-            console.log(response);
+            // console.log(response);
             commit("setEditReport", response);
         });
     },
@@ -125,7 +125,7 @@ const actions = {
                     }else{
                         alert('No data to generate within selected date range');
                     }
-                    console.log(csv);
+                    // console.log(csv);
                     commit("setToPrint", response.data.data);
                     commit("setPrintReportStatus", "success");
                 }
@@ -138,7 +138,7 @@ const actions = {
         commit("setAddReportStatus", "busy");
         Axios.post("/api/reports", data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 201) {
                     commit("setAddReportStatus", "success");
                     commit("setAddReport", {});
@@ -147,17 +147,17 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 commit("setAddReportStatus", "failure");
             });
     },
     updateReport({ commit, state }, data) {
         commit("setEditReportStatus", "busy");
         data._method = "PUT";
-        console.log(data);
+        // console.log(data);
         Axios.post(`/api/reports/${data.id}`, data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
                     commit("setEditReportStatus", "success");
                 } else {
@@ -165,7 +165,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 commit("setEditReportStatus", "failure");
             });
     },
@@ -173,7 +173,7 @@ const actions = {
         commit("setDeleteReportStatus", "busy");
         Axios.delete(`/api/reports/${id}`)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 204) {
                     commit("setDeleteReportStatus", "success");
                     commit("removeReportById", id);
@@ -182,7 +182,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 commit("setDeleteReportStatus", "failure");
             });
     },

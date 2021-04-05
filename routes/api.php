@@ -23,6 +23,7 @@ Route::get('', function () {
 });
 
 Route::resource('users', 'UserController');
+Route::get('tasks/taxed', 'TaskController@taxed');
 Route::resource('tasks', 'TaskController');
 Route::resource('items', 'ItemController');
 Route::resource('reports', 'ReportController');

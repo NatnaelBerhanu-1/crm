@@ -25,11 +25,12 @@ class TaskController extends Controller
             if ($request->query('forGraph') !=null){
                 $filterBy = $request->query('filterBy');
                 if($filterBy == "field"){
-                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'field')->get();
+                    error_log('here');
+                    $revenue = Task::select(DB::raw('sum(total_price) as data, date_part(\'week\',created_at) as label, Extract(year from created_at) as year'))->groupBy('label')->groupBy('year')->orderBy('label')->where('location', 'field')->get();
                 }else if($filterBy == "studio"){
-                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'studio')->get();
+                    $revenue = Task::select(DB::raw('sum(total_price) as data, date_part(\'week\',created_at) as label, Extract(year from created_at) as year'))->groupBy('label')->groupBy('year')->orderBy('label')->where('location', 'studio')->get();
                 }else if($filterBy == "studiolandscape"){
-                    $revenue = Task::select(DB::raw('sum(total_price) as data, date(created_at) as label'))->groupBy('label')->orderBy('label')->where('location', 'studiolandscape')->get();
+                    $revenue = Task::select(DB::raw('sum(total_price) as data, date_part(\'week\',created_at) as label, Extract(year from created_at) as year'))->groupBy('label')->groupBy('year')->orderBy('label')->where('location', 'studiolandscape')->get();
                 }
                 return $this->sendResponse(200, $revenue, "Resource fetched successfully");
             }
@@ -48,14 +49,28 @@ class TaskController extends Controller
                 $condition = "%{$request->query('search')}%";
                 $tasks = Task::where('phone_number', 'like', $condition)->orWhere('name', 'like', $condition)->paginate(10);
             } else {
-                $tasks = Task::with('staffs')->paginate(10);
+                $tasks = Task::orderbystatus()->with('staffs')->paginate(10);
                 $tasks->withPath('');
             }
             return $this->sendResponse(200, $tasks, 'Resource fetched successfully');
         } catch (Exception $e) {
-            echo ($e);
+            error_log ($e);
             return $this->sendResponse(500, null, 'Something went wrong');
         }
+    }
+
+    public function taxed(Request $request){
+        try {
+            error_log('here here');
+            $from = $request->query('from');
+            $to = $request->query('to');
+            $report = Task::where('tax', true)->whereBetween('created_at', [strval($from), strval($to)])->sum('total_price');
+            error_log(json_encode($report));
+            return response(json_encode(['total'=>$report]), 200);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+
     }
 
     /**

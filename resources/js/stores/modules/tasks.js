@@ -1,3 +1,4 @@
+import axios from "axios";
 import Axios from "axios";
 import router from "../../routes";
 // initial state
@@ -24,7 +25,8 @@ const state = () => ({
         "Documentary",
         "VIP Request",
         "Others"
-    ]
+    ],
+    taxedReport: null,
 });
 
 //getters
@@ -58,6 +60,9 @@ const getters = {
     },
     services: (state, getters) => {
         return state.services;
+    },
+    taxedReport: (state) => {
+        return state.taxedReport;
     }
 };
 const mutations = {
@@ -94,26 +99,37 @@ const mutations = {
     },
     setStaffValues(state, payload) {
         state.staffValues = payload;
+    },
+    setTaxedReport(state, payload){
+        state.taxedReport = payload;
     }
 };
 const actions = {
+    getTaxed({commit}, data){
+        axios.get("/api/tasks/taxed?from="+data.from+"&to="+data.to).then(response => {
+            // console.log(response);
+            if(response.status == 200){
+                commit("setTaxedReport", response.data);
+            }
+        });
+    },
     getTasks({ commit, state }, data = { page: 1, search: null }) {
         var baseUrl = "/api/tasks?page=";
         var url = baseUrl + data.page;
         if (data.search != null) {
             url = url + `&search=${data.search}`;
         }
-        console.log(url);
-        console.log(data.search);
+        // console.log(url);
+        // console.log(data.search);
         Axios.get(url).then(response => {
-            // console.log(editResponseWithPagination(response));
-            // console.log(editResponseWithPagination(response));
+            // // console.log(editResponseWithPagination(response));
+            // // console.log(editResponseWithPagination(response));
             commit("setTasks", editResponseWithPagination(response));
         });
     },
     getSingleTask({ commit, state }, id) {
         Axios.get(`/api/tasks/${id}`).then(response => {
-            console.log(response);
+            // console.log(response);
             response.data.data.service = JSON.parse(response.data.data.service);
             commit("setEditTask", response);
         });
@@ -123,7 +139,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             Axios.post("/api/tasks", data)
                 .then(response => {
-                    console.log(response);
+                    // console.log(response);
                     if (response.status == 201) {
                         resolve();
                         commit("setAddTaskStatus", "success");
@@ -139,7 +155,7 @@ const actions = {
                     }
                 })
                 .catch(error => {
-                    console.log(error);
+                    // console.log(error);
                     commit("setAddTaskStatus", "failure");
                 });
         });
@@ -149,7 +165,7 @@ const actions = {
         data._method = "PUT";
         Axios.post(`/api/tasks/${data.id}`, data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
                     commit("setEditTaskStatus", "success");
                 } else {
@@ -157,7 +173,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 commit("setEditTaskStatus", "failure");
             });
     },
@@ -165,7 +181,7 @@ const actions = {
         commit("setDeleteTaskStatus", "busy");
         Axios.delete(`/api/tasks/${id}`)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 204) {
                     commit("setDeleteTaskStatus", "success");
                     commit("removeTaskById", id);
@@ -174,14 +190,14 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 commit("setDeleteTaskStatus", "failure");
             });
     },
     getCalendarTasks({ commit, state }) {
         return new Promise((resolve, reject) => {
             Axios.get("/api/tasks?groupBy=date").then(response => {
-                console.log(response);
+                // console.log(response);
                 response.data.data.forEach(element => {
                     element.display = "list-item";
                     if (element.type == "print") {
@@ -219,11 +235,11 @@ const actions = {
     getInitData({ commit, state }) {
         Axios.get("/api/init")
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) commit("setInitData", response);
             })
             .catch(error => {
-                console.log(error.response);
+                // console.log(error.response);
             });
     },
     setSfaffValue({ commit, state }, value) {

@@ -97,13 +97,13 @@ const actions = {
         }
 
         Axios.get(url).then(response => {
-            console.log(response.data);
+            // console.log(response.data);
             commit("setUsers", response);
         });
     },
     getSingleUser({ commit, state }, id) {
         Axios.get(`/api/users/${id}`).then(response => {
-            console.log(response);
+            // console.log(response);
             commit("setEditUser", response);
         });
     },
@@ -111,7 +111,7 @@ const actions = {
         commit("setAddUserStatus", "busy");
         Axios.post("/api/users", data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 201) {
                     commit("setAddUserStatus", "success");
                     commit("setAddUser", {
@@ -122,7 +122,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error.response.status);
+                // console.log(error.response.status);
                 if (error.response.status == 400) {
                     commit("setAddUserError", "phone number already in use.");
                     commit("setAddUserStatus", "failure");
@@ -135,7 +135,7 @@ const actions = {
         data._method = "PUT";
         Axios.post(`/api/users/${data.id}`, data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
                     commit("setEditUserStatus", "success");
                 } else {
@@ -143,7 +143,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error.response.status);
+                // console.log(error.response.status);
                 if (error.response.status == 400) {
                     commit("setEditUserError", "phone number already in use.");
                     commit("setEditUserStatus", "failure");
@@ -155,7 +155,7 @@ const actions = {
         commit("setDeleteUserStatus", "busy");
         Axios.delete(`/api/users/${id}`)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 204) {
                     commit("setDeleteUserStatus", "success");
                     commit("removeUserById", id);
@@ -164,7 +164,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 commit("setDeleteUserStatus", "failure");
             });
     },
@@ -193,7 +193,7 @@ const actions = {
         data._method = "PUT";
         Axios.post("/api/changePassword", data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
                     commit("setChangePasswordStatus", "success");
                     commit(
@@ -209,7 +209,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error.response);
+                // console.log(error.response);
                 if (error.response.status == 401) {
                     commit("setChangePasswordStatus", "failure");
                     commit(

@@ -63,13 +63,13 @@ const actions = {
         var baseUrl = "/api/items?page=";
         var url = baseUrl + data.page;
         Axios.get(url).then(response => {
-            console.log(response.data);
+            // console.log(response.data);
             commit("setItems", editResponseWithPagination(response));
         });
     },
     getSingleItem({ commit, state }, id) {
         Axios.get(`/api/items/${id}`).then(response => {
-            console.log(response);
+            // console.log(response);
             commit("setEditItem", response);
         });
     },
@@ -77,7 +77,7 @@ const actions = {
         commit("setAddItemStatus", "busy");
         Axios.post("/api/items", data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 201) {
                     commit("setAddItemStatus", "success");
                     commit("setAddItem", {
@@ -92,7 +92,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 commit("setAddItemStatus", "failure");
             });
     },
@@ -101,7 +101,7 @@ const actions = {
         data._method = "PUT";
         Axios.post(`/api/items/${data.id}`, data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
                     commit("setEditItemStatus", "success");
                 } else {
@@ -109,7 +109,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 commit("setEditItemStatus", "failure");
             });
     },
@@ -117,7 +117,7 @@ const actions = {
         commit("setDeleteItemStatus", "busy");
         Axios.delete(`/api/items/${id}`)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 204) {
                     commit("setDeleteItemStatus", "success");
                     commit("removeItemById", id);
@@ -126,7 +126,7 @@ const actions = {
                 }
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
                 commit("setDeleteItemStatus", "failure");
             });
     },

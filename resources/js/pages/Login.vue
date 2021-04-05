@@ -75,7 +75,7 @@ export default {
           password: this.password,
         }).then((response) => {
           if (response.status == 200) {
-              console.log(JSON.stringify( response.data.data));
+              // console.log(JSON.stringify( response.data.data));
             this.loginStatus = 'success';
             localStorage.setItem("user", JSON.stringify(response.data.data).toString());
             this.$router.push('/dashboard');

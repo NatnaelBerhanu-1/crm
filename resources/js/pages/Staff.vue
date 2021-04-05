@@ -86,7 +86,7 @@ export default {
     deleteUser: function (userId) {
       var resp = confirm("Do you want to remove this user?");
       if (resp) this.$store.dispatch("deleteUser", userId);
-      console.log(userId);
+      // console.log(userId);
     },
     onClose: function () {
       this.$store.dispatch("resetDeleteUserStatus");

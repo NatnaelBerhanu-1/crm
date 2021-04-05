@@ -101,7 +101,7 @@ export default {
   methods: {
     addItem: function (e) {
       e.preventDefault();
-      console.log(this.item);
+      // console.log(this.item);
       this.$store.dispatch("addItem", this.item);
     },
     onClose: function (e) {

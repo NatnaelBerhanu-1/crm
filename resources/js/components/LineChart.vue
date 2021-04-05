@@ -21,8 +21,8 @@
               label: this.label,
               backgroundColor: "#00000000",
               pointRadius: 0,
-              borderWidth: 2,
-              borderColor: "#3D68FF",
+              borderWidth: .5,
+              borderColor: "#3D6822",
               backgroundColor: "#3D68FF10",
               //Data to be represented on y-axis
               data: this.data

@@ -259,135 +259,129 @@ export default {
         servicesError: false,
         staffError: false,
         packageDescriptions: [
-        `
-        • Studio: 45 x 60, 30-page laminated album
-        • Landscape: 30 x 90, 30-page laminated album
-        • Landscape video 10 – 12 minutes
-        • Photo:
+        `• Studio: 45 x 60, 30-page laminated album
+• Landscape: 30 x 90, 30-page laminated album
+• Landscape video 10 – 12 minutes
+• Photo:
         o 1 - 60 x 120 with matte frame
         o 1 - 50 x 80 Photo + board frame
         o 2 – 30 x 45 Photo + board frame
         o 500 thank you card
         o 2 mini album (15 x 30) 20 page
         o 2 signboards + softcopy
-        • Bridal Photo
+• Bridal Photo
         o 20 x 25, 22 pages laminated + video by 1 camera man
-        • Wedding day
+• Wedding day
         o Photo - 40 x 60, 40 pages laminated album with leather cover (by 2 camera man)
         o Video – by 3 or 4 camera man + GoPro + Drone with full HD
-        • Melse (መልስ)
+• Melse (መልስ)
         o Photo – 45 x 60, 30 pages laminated album
         o Video – by 2 camera man + drone with editing
-        • Kelkel (ቅልቅል)
+• Kelkel (ቅልቅል)
         o Photo – 30 x 60, 22 pages laminated album
         o Video – by 2 camera man with editing
-        • Enshoshula (እንሾሽላ)
+• Enshoshula (እንሾሽላ)
         o Photo – 40 x 60, 30 pages
         o Video – by 2 camera man with editing
-        • Soft copy of all photos and videos will be provide with 2 hard disk copies
+• Soft copy of all photos and videos will be provide with 2 hard disk copies
           `,
-        `
-        • Studio: 40 x 60, 22 pages laminated album
-        • Landscape: 30 x 90, 22 pages laminated album
-        • Landscape video: 8 – 12 minutes video
-        • Photo:
+        `• Studio: 40 x 60, 22 pages laminated album
+• Landscape: 30 x 90, 22 pages laminated album
+• Landscape video: 8 – 12 minutes video
+• Photo:
         o 2 – 50 x 80 photo + board frame
         o 2 – 30 x 45 photo + board frame
         o 2 - 20 pages mini album (15 x 30)
         o 400 thank you card
         o 2 signboards + soft copy
-        • Bridal Photo: 20 x 25, 22 pages
-        • Wedding day
+• Bridal Photo: 20 x 25, 22 pages
+• Wedding day
         o Photo – 45 x 60, 30 pages laminated album by 2 camera man
         o Video – by 3 camera man full HD with editing
-        • Melse (መልስ)
+• Melse (መልስ)
         o Photo - 45 x 60, 30 pages laminated album
         o Video – by 2 camera man + drone
-        • Kelkel (ቅልቅል)
+• Kelkel (ቅልቅል)
         o Photo – 30 x 60, 22 pages laminated album
         o Video by 1 camera man
         `,
-        `
-        • Studio: 40 x 60, 22 pages laminated album
-        • Landscape: 30 x 90, 22 pages laminated album
-        • Photo:
+        `• Studio: 40 x 60, 22 pages laminated album
+• Landscape: 30 x 90, 22 pages laminated album
+• Photo:
         o 2 – 50 x 80 photo + frame board
         o 2 - 30 x 45 photo + frame board
         o 1 signboard
         o 1 mini album (15 x 30) 20 pages
         o 300 thank you card
-        • Bridal photo (20 x 25)
-        • Wedding day
+• Bridal photo (20 x 25)
+• Wedding day
         o Photo – 45 x 60, 30 pages laminated album
         o Video – by 3 camera man + drone full HD with editing
-        • Melse (መልስ)
+• Melse (መልስ)
         o Photo – 45 x 60, 30 pages laminated album
         o Video – by 2 camera man full HD with editing
         `,
       ],
       packageDescriptionsForContract: [
-        `
-        • Studio: 45 x 60, 30-page laminated album<w:br/>
-        • Landscape: 30 x 90, 30-page laminated album<w:br/>
-        • Landscape video 10 – 12 minutes<w:br/>
-        • Photo:<w:br/>
+        `• Studio: 45 x 60, 30-page laminated album<w:br/>
+• Landscape: 30 x 90, 30-page laminated album<w:br/>
+• Landscape video 10 – 12 minutes<w:br/>
+• Photo:<w:br/>
         o 1 - 60 x 120 with matte frame<w:br/>
         o 1 - 50 x 80 Photo + board frame<w:br/>
         o 2 – 30 x 45 Photo + board frame<w:br/>
         o 500 thank you card<w:br/>
         o 2 mini album (15 x 30) 20 page<w:br/>
         o 2 signboards + softcopy<w:br/>
-        • Bridal Photo<w:br/>
+• Bridal Photo<w:br/>
         o 20 x 25, 22 pages laminated + video by 1 camera man<w:br/>
-        • Wedding day<w:br/>
+• Wedding day<w:br/>
         o Photo - 40 x 60, 40 pages laminated album with leather cover (by 2 camera man)<w:br/>
         o Video – by 3 or 4 camera man + GoPro + Drone with full HD<w:br/>
-        • Melse (መልስ)<w:br/>
+• Melse (መልስ)<w:br/>
         o Photo – 45 x 60, 30 pages laminated album<w:br/>
         o Video – by 2 camera man + drone with editing<w:br/>
-        • Kelkel (ቅልቅል)<w:br/>
+• Kelkel (ቅልቅል)<w:br/>
         o Photo – 30 x 60, 22 pages laminated album<w:br/>
         o Video – by 2 camera man with editing<w:br/>
-        • Enshoshula (እንሾሽላ)<w:br/>
+• Enshoshula (እንሾሽላ)<w:br/>
         o Photo – 40 x 60, 30 pages<w:br/>
         o Video – by 2 camera man with editing<w:br/>
-        • Soft copy of all photos and videos will be provide with 2 hard disk copies
+• Soft copy of all photos and videos will be provide with 2 hard disk copies
           `,
-        `
-        • Studio: 40 x 60, 22 pages laminated album<w:br/>
-        • Landscape: 30 x 90, 22 pages laminated album<w:br/>
-        • Landscape video: 8 – 12 minutes video<w:br/>
-        • Photo:<w:br/>
+        `• Studio: 40 x 60, 22 pages laminated album<w:br/>
+• Landscape: 30 x 90, 22 pages laminated album<w:br/>
+• Landscape video: 8 – 12 minutes video<w:br/>
+• Photo:<w:br/>
         o 2 – 50 x 80 photo + board frame<w:br/>
         o 2 – 30 x 45 photo + board frame<w:br/>
         o 2 - 20 pages mini album (15 x 30)<w:br/>
         o 400 thank you card<w:br/>
         o 2 signboards + soft copy<w:br/>
-        • Bridal Photo: 20 x 25, 22 pages<w:br/>
-        • Wedding day<w:br/>
+• Bridal Photo: 20 x 25, 22 pages<w:br/>
+• Wedding day<w:br/>
         o Photo – 45 x 60, 30 pages laminated album by 2 camera man<w:br/>
         o Video – by 3 camera man full HD with editing<w:br/>
-        • Melse (መልስ)<w:br/>
+• Melse (መልስ)<w:br/>
         o Photo - 45 x 60, 30 pages laminated album<w:br/>
         o Video – by 2 camera man + drone<w:br/>
-        • Kelkel (ቅልቅል)<w:br/>
+• Kelkel (ቅልቅል)<w:br/>
         o Photo – 30 x 60, 22 pages laminated album<w:br/>
         o Video by 1 camera man
         `,
-        `
-        • Studio: 40 x 60, 22 pages laminated album<w:br/>
-        • Landscape: 30 x 90, 22 pages laminated album<w:br/>
-        • Photo:<w:br/>
+        `• Studio: 40 x 60, 22 pages laminated album<w:br/>
+• Landscape: 30 x 90, 22 pages laminated album<w:br/>
+• Photo:<w:br/>
         o 2 – 50 x 80 photo + frame board<w:br/>
         o 2 - 30 x 45 photo + frame board<w:br/>
         o 1 signboard<w:br/>
         o 1 mini album (15 x 30) 20 pages<w:br/>
         o 300 thank you card<w:br/>
-        • Bridal photo (20 x 25)<w:br/>
-        • Wedding day<w:br/>
+• Bridal photo (20 x 25)<w:br/>
+• Wedding day<w:br/>
         o Photo – 45 x 60, 30 pages laminated album<w:br/>
         o Video – by 3 camera man + drone full HD with editing<w:br/>
-        • Melse (መልስ)<w:br/>
+• Melse (መልስ)<w:br/>
         o Photo – 45 x 60, 30 pages laminated album<w:br/>
         o Video – by 2 camera man full HD with editing<w:br/>
         `,
@@ -399,7 +393,7 @@ export default {
       return this.$store.getters.users;
     },
     editTaskStatus: function () {
-      console.log(this.$store.getters.addTaskStatus);
+      // console.log(this.$store.getters.addTaskStatus);
       return this.$store.getters.editTaskStatus;
     },
     task: function () {
@@ -428,7 +422,7 @@ export default {
   methods: {
     editTask: function (e) {
       e.preventDefault();
-      console.log(this.task);
+      // console.log(this.task);
       var phoneno = /^\d{10}$/;
       if (this.task.data.data.service.length == 0 || this.task.data.data.staffs.length == 0){
           if(this.task.data.data.service.length == 0) this.servicesError = true;
@@ -445,17 +439,17 @@ export default {
             staffs.push(staff.id);
         });
         if (this.task.data.data.desc_for_contract) {
-            console.log("here");
+            // console.log("here");
         }else{
             this.packageChanged();
         }
-        console.log(this.task.data.data.desc_for_contract);
-        console.log(this.task.data.data.remark);
+        // console.log(this.task.data.data.desc_for_contract);
+        // console.log(this.task.data.data.remark);
         var data = Object.assign({}, this.task.data.data);
         data.staffs = staffs;
-        console.log(data);
-        console.log(this.task.data.data);
-        console.log(this.task.data.data.desc_for_contract);
+        // console.log(data);
+        // console.log(this.task.data.data);
+        // console.log(this.task.data.data.desc_for_contract);
 
         this.$store.dispatch("updateTask", data);
       } else {
@@ -466,11 +460,11 @@ export default {
       this.$store.dispatch("resetEditTaskStatus");
     },
     parseDateTime: function (date) {
-      console.log(`${date.slice(0, 10)}T${date.slice(11)}`);
+      // console.log(`${date.slice(0, 10)}T${date.slice(11)}`);
       return `${date.slice(0, 10)}T${date.slice(11)}`.toString();
     },
     packageChanged: function (e) {
-      console.log(this.task.data.data.package);
+      // console.log(this.task.data.data.package);
       var index;
       switch (this.task.data.data.package) {
         case "platinum":
@@ -485,7 +479,7 @@ export default {
         default:
           break;
       }
-      console.log(index);
+      // console.log(index);
       this.task.data.data.remark = this.packageDescriptions[index];
       this.task.data.data.desc_for_contract = this.packageDescriptionsForContract[index];
     },

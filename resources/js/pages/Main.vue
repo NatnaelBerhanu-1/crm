@@ -37,7 +37,7 @@ export default {
             if(this.logoutModalState && event.target.id != 'profile-icon'){
                 this.logoutModalState = false;
             }
-            // console.log(this.logoutModalState);
+            // // console.log(this.logoutModalState);
         },
         logout: function() {
             localStorage.removeItem('user');
