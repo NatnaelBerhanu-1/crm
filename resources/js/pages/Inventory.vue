@@ -54,11 +54,14 @@
                   class="mr-2 hover:text-blue-400 cursor-pointer"
                 />
               </router-link>
+              <div data-cy="deleteInventory">
+                  
               <font-awesome-icon
                 icon="trash"
                 v-on:click="deleteItem(item.id)"
                 class="hover:text-red-400 cursor-pointer"
               />
+              </div>
             </td>
           </tr>
         </tbody>

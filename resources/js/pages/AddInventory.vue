@@ -67,7 +67,7 @@
           </button>
         </div>
         <div class="form-control" v-else>
-          <button class="btn-primary">
+          <button data-cy="addInventory" class="btn-primary">
             <font-awesome-icon icon="plus" size="sm" />
             <span>Add Inventory</span>
           </button>

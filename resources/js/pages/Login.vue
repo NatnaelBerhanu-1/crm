@@ -18,6 +18,7 @@
             type="phone"
             v-model="phoneNumber"
             id="phone-number"
+            data-cy="login-phone-number"
             @input="validatePhoneNumber"
             required
           />
@@ -30,13 +31,14 @@
         <div class="form-control">
           <label for="phone-number">Password</label>
           <br />
-          <input type="password" v-model="password" id="password" required />
+          <input type="password" v-model="password" id="password" required data-cy="login-password"/>
         </div>
         <div class="form-control mt-2">
           <button
             type="submit"
             class="bg-primary w-64 h-9 text-white rounded-full"
             disabled
+            data-cy="login-submit"
             v-if="loginStatus == 'busy'"
           >
             <font-awesome-icon icon="spinner" class="mr-2" spin />Login
@@ -78,7 +80,8 @@ export default {
               console.log(JSON.stringify( response.data.data));
             this.loginStatus = 'success';
             localStorage.setItem("user", JSON.stringify(response.data.data).toString());
-            this.$router.push('/dashboard');
+            alert(response.data.data);
+            this.$router.push('/dashboard').catch(() => {});
           }
         }).catch(error => {
             this.loginStatus = 'failed';

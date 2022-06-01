@@ -16,6 +16,8 @@ class AuthenticationController extends Controller
                 'password'=>'required'
             ]);
             if($validated){
+                error_log($request->phone_number);
+                error_log($request->password);
                 $user = User::where('phone_number', $request->phone_number)->first();
                 if(isset($user)){
                     if(Hash::check($request->password, $user->password)){

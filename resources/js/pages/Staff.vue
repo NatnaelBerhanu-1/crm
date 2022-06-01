@@ -6,7 +6,7 @@
         <span class="pl-2">Staff</span>
       </p>
       <router-link to="add" append>
-        <div class="bg-primary h-8 text-white px-2 rounded text-sm flex flex-row items-center">
+        <div data-cy="addStaff" class="bg-primary h-8 text-white px-2 rounded text-sm flex flex-row items-center">
           <font-awesome-icon icon="plus" size="sm" />
           <span class="ml-1">Add Staff</span>
         </div>
@@ -48,11 +48,13 @@
                   class="mr-2 hover:text-blue-400 cursor-pointer"
                 />
               </router-link>
+              <div data-cy='deleteStaff'>
               <font-awesome-icon
                 icon="trash"
                 class="hover:text-red-400 cursor-pointer"
                 @click="deleteUser(user.id)"
               />
+              </div>
             </td>
           </tr>
         </tbody>
